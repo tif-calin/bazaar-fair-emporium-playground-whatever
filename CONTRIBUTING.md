@@ -1,6 +1,8 @@
+# contributing
 
-## git commits
+## tutorials
 
-Follow [git's practice](https://github.com/git/git/blob/master/Documentation/SubmittingPatches#L266) instead of [conventional commits](https://www.conventionalcommits.org/).
-* 50 char soft limit for first line. no periods
-* prefix with `area: ` where area is the file or general area being modified
+### how to add a new page
+
+1. create a new file in `app/pages` directory
+2. inside of `app/routes.ts` add a new route in the `PAGES` export.

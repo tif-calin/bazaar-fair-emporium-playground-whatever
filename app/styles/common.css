@@ -43,6 +43,4 @@
   --fnt-sans: var(--font-humanist);
   --fnt-serif: var(--font-transitional);
   --fnt-mono: var(--font-code);
-
-  /* Shadow tokens https://www.joshwcomeau.com/shadow-palette/ */
 }
