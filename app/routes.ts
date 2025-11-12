@@ -1,3 +1,13 @@
-import { type RouteConfig, index } from "@react-router/dev/routes";
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
-export default [index("pages/home/index.tsx")] satisfies RouteConfig;
+export const PAGES = [
+  {
+    urlPath: "refuge2",
+    componentPath: "pages/refuge2/index.tsx",
+  },
+];
+
+export default [
+  index("pages/home/index.tsx"),
+  ...PAGES.map(({ urlPath, componentPath }) => route(urlPath, componentPath)),
+] satisfies RouteConfig;

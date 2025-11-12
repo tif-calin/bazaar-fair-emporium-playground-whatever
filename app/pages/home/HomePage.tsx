@@ -1,6 +1,8 @@
 import React from 'react';
 import { styled } from "@linaria/react";
 import RainbowText from '~/components/RainbowText';
+import { PAGES } from '~/routes';
+import { Link } from 'react-router';
 
 const Page = styled.div`
   display: flex;
@@ -41,9 +43,16 @@ const HomePage = (_: Props): React.ReactElement => {
           </h1>
         </header>
         <main>
-          <div
-            className="content"
-          >This is the home page</div>
+          <div className="content">
+            What pages are here:
+            <ul>
+              {PAGES.map(({ urlPath }) => (
+                <li key={urlPath}>
+                  <Link to={urlPath}>{urlPath}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </main>
         <footer></footer>
       </Page>
