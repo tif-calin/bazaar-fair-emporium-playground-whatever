@@ -1,0 +1,48 @@
+/*** ===================== */
+/** === ATOMIC TOKENS === **/
+/* ===================== ***/
+:root {
+  /* Font Tokens (https://modernfontstacks.com/) */
+  /* TODO(boot): select your font tokens (https://modernfontstacks.com/) */
+  --font-transitional: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+  --font-humanist: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+  --font-code: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+
+  /* Color Tokens (https://yeun.github.io/open-color/) */
+  /* TODO(boot): select your color tokens (https://yeun.github.io/open-color/) */
+  --color-white: #f8fafb;
+  --color-offwhite: #f2f4f6;
+  --color-black: #121210;
+  --color-offblack: #252521;
+
+  --oc-red-4: #ff8787;
+  --oc-pink-4: #f783ac;
+  --oc-grape-4: #da77f2;
+  --oc-violet-4: #9775fa;
+  --oc-indigo-4: #748ffc;
+  --oc-blue-4: #4dabf7;
+  --oc-cyan-4: #3bc9db;
+  --oc-teal-4: #38d9a9;
+  --oc-green-4: #69db7c;
+  --oc-lime-4: #a9e34b;
+  --oc-yellow-4: #ffd43b;
+  --oc-orange-4: #ffa94d;
+
+  /* TODO(boot): select other style tokens (https://open-props.style/) */
+}
+
+/*** ======================= */
+/** === SEMANTIC TOKENS === **/
+/* ======================= ***/
+:root {
+  --clr-bg: var(--color-offwhite);
+  --clr-fg: var(--color-white);
+  --clr-txt: var(--color-offblack);
+  --clr-line: var(--color-black);
+
+  --fnt-sans: var(--font-humanist);
+  --fnt-serif: var(--font-transitional);
+  --fnt-mono: var(--font-code);
+
+  /* Shadow tokens https://www.joshwcomeau.com/shadow-palette/ */
+}

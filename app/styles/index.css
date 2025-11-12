@@ -1,0 +1,51 @@
+@import url("./global.css");
+@import url("./common.css");
+
+:root {
+  background-color: var(--clr-bg);
+  color: var(--clr-txt);
+  color-scheme: light dark;
+  font-family: var(--fnt-sans);
+  line-height: 1.45; /* https://practicaltypography.com/line-spacing.html */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --clr-bg: var(--color-black);
+    --clr-fg: var(--color-offblack);
+    --clr-txt: var(--color-white);
+    --clr-line: var(--color-offwhite);
+  }
+}
+
+html,
+body {
+  margin: 0;
+  overflow-y: overlay;
+  padding: 0;
+
+  & *:where(h1, h2, h3, h4, h5, h6) {
+    line-height: 1;
+    text-align: center;
+    width: 100%;
+
+    &:where(h1) { font-size: 2.5em; font-weight: 800; }
+    &:where(h2) { font-size: 2em; font-weight: 800; }
+    &:where(h3) { font-size: 1.75em; font-weight: 700; }
+    &:where(h4) { font-size: 1.5em; font-weight: 700; }
+    &:where(h5) { font-size: 1.25em; font-weight: 600; }
+    &:where(h6) { font-size: 1em; font-weight: 600; }
+  }
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  & button,
+  & input[type=checkbox]:not(:disabled),
+  & input[type=radio]:not(:disabled),
+  & summary {
+    cursor: pointer;
+  }
+}
