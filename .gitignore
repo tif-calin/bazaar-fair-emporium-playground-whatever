@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# See https://help.github.com/articles/ignoring-files/
 
 # dependencies
 /node_modules
@@ -34,7 +34,7 @@ package-lock.json
 #pnpm-lock.yaml
 yarn.lock
 
-# editor directories and files
+# editor directories and OS files
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -46,5 +46,7 @@ yarn.lock
 *.sln
 *.sw?
 
-# local files
-*.local
+### PER PROJECT ###
+# refuge2
+**/refuge2/data/*
+!sample.json
