@@ -5,6 +5,10 @@ export const PAGES = [
     urlPath: "refuge2",
     componentPath: "pages/refuge2/index.tsx",
   },
+  {
+    urlPath: "cladetable",
+    componentPath: "pages/cladetable/index.tsx",
+  },
 ];
 
 export default [
