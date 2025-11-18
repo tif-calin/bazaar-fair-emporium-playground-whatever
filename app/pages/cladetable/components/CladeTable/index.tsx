@@ -18,9 +18,10 @@ const VizContainer = styled.div`
 
     & .node {
       fill: var(--clr-txt);
+    }
 
-      & text {
-      }
+    & .edges path {
+      fill: none;
     }
   }
 `;

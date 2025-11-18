@@ -6,6 +6,24 @@ interface Props {
   parsedEdges: Record<CladeTableEdge["id"], CladeTableEdge>;
 }
 
+const drawEdgePath = (sourceX: number, sourceY: number, targetX: number, targetY: number) => {
+  const dx = targetX - sourceX;
+  const dy = targetY - sourceY;
+  const crv = 2;
+
+  let upOrDown = dy > 0 ? 1 : -1;
+  if (!dy) upOrDown = 0;
+
+  return `
+    M ${sourceX} ${sourceY}
+    h 2
+    s 2 0 2 ${upOrDown * crv}
+    v ${dy + crv * 2 * -upOrDown}
+    s 0 ${upOrDown * crv} 2 ${upOrDown * crv}
+    h ${dx - crv * 3}
+  `;
+};
+
 const Plot = ({ parsedNodes, parsedEdges }: Props) => {
   return (
     <g className="plot">
@@ -14,13 +32,15 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
           const { source, target } = edge;
 
           return (
-            <line
+            <path
               key={edge.id}
               stroke="black"
-              x1={parsedNodes[source].x}
-              y1={parsedNodes[source].y}
-              x2={parsedNodes[target].x}
-              y2={parsedNodes[target].y}
+              d={drawEdgePath(
+                parsedNodes[source].x,
+                parsedNodes[source].y,
+                parsedNodes[target].x,
+                parsedNodes[target].y
+              )}
             />
           );
         })}
@@ -32,7 +52,7 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
 
           return (
             <g className="node" key={node.id} transform={`translate(${node.x}, ${node.y})`}>
-              <circle r={2} />
+              <circle r={1.5} />
               {isLeafNode && (
                 <text dy="0.25em" dx="0.5em">
                   {node.label || node.id}
