@@ -28,6 +28,11 @@ const Page = styled.div`
 
     --shadow-color: 0deg 0% 80%;
     box-shadow: var(--shadow-inset-medium), inset 0 0 2px hsl(var(--shadow-color));
+
+    & ul.page-list {
+      list-style: disc;
+      margin-left: 1rem;
+    }
   }
 `;
 
@@ -45,7 +50,7 @@ const HomePage = (_: Props): React.ReactElement => {
         <main>
           <div className="content">
             What pages are here:
-            <ul>
+            <ul className="page-list">
               {PAGES.map(({ urlPath }) => (
                 <li key={urlPath}>
                   <Link to={urlPath}>{urlPath}</Link>
