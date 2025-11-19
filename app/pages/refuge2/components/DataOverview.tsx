@@ -1,6 +1,7 @@
 import React from "react";
+import analyzeRefugeData from "./analyzeRefugeData";
 
-type RefugeEntry = Pick<
+export type RefugeEntry = Pick<
   typeof import("../data/sample.json")[number],
   | "edit_id"
   | "id"
@@ -23,13 +24,37 @@ type RefugeEntry = Pick<
   | "updated_at"
 >;
 
+/**
+ * Clean up goals:
+ * - consolidate the same places
+ * - remove whitespace
+ * - standardize address format
+ */
 const DataOverview = () => {
   const [refugeEntries, setRefugeEntries] = React.useState<RefugeEntry[]>([]);
 
   const handleLoadData = React.useCallback(async () => {
-    const data = await import("../data/sample.json");
+    const json = await import("../data/sample.json");
+    const data = json.default;
 
-    setRefugeEntries(data.default);
+    analyzeRefugeData(data);
+
+    // const byId = groupByKey(data, "id");
+
+    // const matrix = pairwise(
+    //   data.map((entry) => entry.id),
+    //   (idA, idB) =>
+    //     haversine(
+    //       byId[idA][0].latitude,
+    //       byId[idA][0].longitude,
+    //       byId[idB][0].latitude,
+    //       byId[idB][0].longitude
+    //     )
+    // );
+
+    // console.table(matrix);
+
+    setRefugeEntries(data);
   }, []);
 
   return refugeEntries.length ? (

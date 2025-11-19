@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 import { styled } from "@linaria/react";
-import RainbowText from '~/components/RainbowText';
-import { PAGES } from '~/routes';
-import { Link } from 'react-router';
+import RainbowText from "~/components/RainbowText";
+import { PAGES } from "~/routes";
+import { Link } from "react-router";
 
 const Page = styled.div`
   display: flex;
