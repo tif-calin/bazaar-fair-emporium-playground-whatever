@@ -1,8 +1,6 @@
 import { styled } from "@linaria/react";
 import React from "react";
-import LatinToOttid from "./components/LatinToOttid";
-import CladeTable from "./components/CladeTable";
-import parseTree from "./components/CladeTable/utils/parseTree";
+import PhylogeneticCladeTable from "./components/PhylogeneticCladeTable";
 
 const Page = styled.div`
   display: flex;
@@ -24,36 +22,13 @@ const Page = styled.div`
   }
 
   & > main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     flex-grow: 1;
     min-height: 50vh;
-
-    --shadow-color: 0deg 0% 80%;
-    box-shadow: var(--shadow-inset-medium), inset 0 0 2px hsl(var(--shadow-color));
   }
 `;
-
-const [_, SAMPLE_DATA] = parseTree({
-  children: [
-    { children: [{ name: "alpine gentian" }, { name: "sweet lady flower" }] },
-    {
-      children: [
-        { children: [{ name: "willow gentian" }, { name: "Karawanken gentian" }] },
-        {
-          children: [
-            { name: "great yellow gentian" },
-            {
-              children: [
-                { name: "purple gentian" },
-                { name: "brown gentian" },
-                { name: "spotted gentian" },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ],
-});
 
 const CladeTablePage = () => {
   return (
@@ -63,7 +38,7 @@ const CladeTablePage = () => {
       </header>
       <main>
         {/* <LatinToOttid /> */}
-        <CladeTable title="example" id="example" data={SAMPLE_DATA} />
+        <PhylogeneticCladeTable />
       </main>
       <footer></footer>
     </Page>

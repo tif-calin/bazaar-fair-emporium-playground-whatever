@@ -9,6 +9,21 @@ My goal here is to create a reusable component that renders such visualizations.
 
 ## LOG
 
+### 2025-11-19
+I'm dreading implementing size tracking for the table rows so I'm working on tangental stuff.
+
+I think I've gained a lot of clarity on what the final solution will look like. I've differentiated between the more "pure" CladeTable component and stuff specifically related to the phylogenetic use-case. I also think I can accomplish all I want with just the CladeTable component and a simple `<textarea>` for the newick tree.
+
+The `CladeTable` component will allow for any cell in the table-part of it to be a `ReactNode`. I'm planning for the `PhylogeneticCladeTable` to render individual cells as editable `<input>`s.
+
+Some TODOs I've amassed today:
+- [ ] save textarea input to localStorage and make sure there's a "reset" button
+- [ ] add link to repo in footer
+- [ ] turn a lot of magic numbers into CladeTable#options like the horizontal spacing per "level" and the curvature of the edges
+- [ ] for the `columns` API, add an optional function to decide how to render the cell content. Will have to do some digging into react table libraries to find an idiomatic convention.
+
+Thanks to [Timur Kelman](https://stackoverflow.com/questions/40843210).
+
 ### 2025-11-18 TODO: Figure out how to handle dynamically sized cell contents
 Currently, the table only works if the height of the rows are static. A more complex cell (e.g. multiline) will fall out of sync with the placement of the leaves of the cladogram.
 
@@ -17,4 +32,6 @@ I'm chewing on two possible approaches for this:
 1. Move the rows (or entire tables?) into the svg as a `<foreginObject>`.
 2. Everything except the cladogram is in the table and we use `ResizeObserver`s and `useLayoutEffect` to track the positions/heights of each row.
 
-I don't have much experience with `foreignObject`. I *do* have a lot of experience with the `ResizeObbserver` API but it is tedious and I'm itching to explore an alternative. My primary constirnation is solving the problem of translating between pixels and SVG coordinates.
+I don't have much experience with `foreignObject`. I *do* have a lot of experience with the `ResizeObserver` API but it is tedious and I'm itching to explore an alternative. My primary constirnation is solving the problem of translating between pixels and SVG coordinates.
+
+Update: Thanks to [Andy Clarke](https://stuffandnonsense.co.uk/blog/a-quick-note-about-svg-foreignobject) and [Sabatino Masala](https://www.sabatino.dev/how-this-small-change-saved-us-over-eu2-400-yearly/) for their writings on `foreignObject`. However, I don't think that approach solves the coordinate problem and I've accepted that something like a ResizeObserver will be necessary either way.

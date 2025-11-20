@@ -1,0 +1,34 @@
+import type { NewickNode } from "~/pages/cladetable/utils/parseNewick";
+
+const RE_OTT_NODE_NAME = /^(?<genus>[A-z-]+)_(?<speciesEpitaph>[A-z-]+)_ott(?<ottId>\d+)$/;
+
+/**
+ * Takes the ouput of `parseNewick` and prepares it for the `PhylogeneticCladeTable` component by:
+ * - pruning the tree so that leaf nodes are only at the species level (no subspecies or varieties)
+ * - setting the `id`
+ * - formatting the latin name and ott id.
+ *
+ * > [!WARNING]
+ * > This function works in-place and mutates the input.
+ */
+const prepareNewickTree = (node: NewickNode) => {
+  let treeDoesContainDesiredLeaf = false;
+
+  if (node.name) {
+    const match = RE_OTT_NODE_NAME.exec(node.name);
+    if (match) {
+      treeDoesContainDesiredLeaf = true;
+
+      const { genus, speciesEpitaph, ottId } = match.groups!;
+      const latinName = `${genus} ${speciesEpitaph}`;
+      node.data = { genus, latinName, ottId, speciesEpitaph, ...node.data };
+    }
+  }
+
+  if (node.children) node.children = node.children.filter((child) => prepareNewickTree(child));
+  if (node.children?.length) treeDoesContainDesiredLeaf = true;
+
+  return treeDoesContainDesiredLeaf;
+};
+
+export default prepareNewickTree;

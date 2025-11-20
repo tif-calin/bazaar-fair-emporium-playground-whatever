@@ -4,15 +4,20 @@ import type { CladeTableData } from "../types";
 
 let id = 0;
 const nodeToId = new Map<NewickNode, string>();
-const parseTree = (
+/**
+ * Parses a NewickNode (resulting from the `parseNewick` util) to flatten the tree into a collection
+ * of nodes and edges that the `CladeTable` component can render.
+ */
+const parseTreeForCladeTable = (
   node: NewickNode,
-  { nodes, edges }: CladeTableData = { nodes: {}, edges: {} }
+  { nodes, edges }: Pick<CladeTableData, "nodes" | "edges"> = { nodes: {}, edges: {} }
 ) => {
   if (!nodeToId.has(node)) nodeToId.set(node, `node:${id++}`);
 
   const nodeId = nodeToId.get(node)!;
   nodes[nodeId] = {
     id: nodeId,
+    ...node,
     label: node.name,
     depth: findDepth(node),
     leafCount: countLeaves(node),
@@ -20,10 +25,14 @@ const parseTree = (
 
   node.children?.forEach((child) => {
     const edgeId = `edge:${id++}`;
-    edges[edgeId] = { id: edgeId, source: nodeId, target: parseTree(child, { nodes, edges })[0] };
+    edges[edgeId] = {
+      id: edgeId,
+      source: nodeId,
+      target: parseTreeForCladeTable(child, { nodes, edges })[0],
+    };
   });
 
   return [nodeId, { nodes, edges }] as const;
 };
 
-export default parseTree;
+export default parseTreeForCladeTable;
