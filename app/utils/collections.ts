@@ -1,3 +1,11 @@
+/**
+ * Given an array, returns an array of arrays, each with a maximum length of `size`.
+ *
+ * @example ```
+ * chunk([1, 2, 3, 4, 5], 3);
+ * // [[1, 2, 3], [4, 5]]
+ * ```
+ */
 export const chunk = <T>(arr: T[], size: number) => {
   if (!Number.isSafeInteger(size)) throw new Error("size must be a safe integer");
 
@@ -9,3 +17,32 @@ export const chunk = <T>(arr: T[], size: number) => {
     return acc;
   }, []);
 };
+
+/**
+ * Returns hash with property values for keys, grouped items as values
+ */
+export const groupByFunction = <NewKey extends string, ObjType>(
+  items: ObjType[],
+  keyGetter: (obj: ObjType, i: number) => NewKey
+): Record<NewKey, ObjType[]> =>
+  items.reduce<Record<string, ObjType[]>>((acc, item, i) => {
+    const typename = keyGetter(item, i);
+
+    acc[typename] ||= [];
+    acc[typename].push(item);
+    return acc;
+  }, {});
+
+/**
+ * Takes a list of objects and groups them by a given key.
+ */
+export const groupByKey = <Obj extends { [key in Key]: PropertyKey }, Key extends keyof Obj>(
+  items: Obj[],
+  key: Key
+) =>
+  items.reduce((acc, item) => {
+    const typename = item[key];
+    acc[typename] ||= [];
+    acc[typename].push(item);
+    return acc;
+  }, {} as Record<Obj[Key], Obj[]>);

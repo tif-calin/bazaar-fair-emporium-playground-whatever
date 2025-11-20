@@ -52,7 +52,12 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
           const isLeafNode = node.depth === 1;
 
           return (
-            <g className="node" key={node.id} transform={`translate(${node.x}, ${node.y})`}>
+            <g
+              key={node.id}
+              className="node"
+              transform={`translate(${node.x}, ${node.y})`}
+              fill="var(--clr-txt)"
+            >
               <circle r={1.5} />
               {isLeafNode && (
                 <text dy="0.25em" dx="0.5em">

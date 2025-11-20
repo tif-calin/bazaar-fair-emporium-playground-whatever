@@ -5,6 +5,7 @@ import { mapObject } from "~/utils/object";
 import Plot from "./Plot";
 import useResizeObserver from '~/utils/useResizeObserver';
 import { sum } from '~/utils/numbers';
+import { groupByKey } from '~/utils/collections';
 
 interface Props {
   data: CladeTableData;
@@ -20,14 +21,6 @@ const VizContainer = styled.div<{
   & td:has(> svg.cladogram) {
     border: 1px dashed var(--clr-line);
     min-width: ${(props) => props.cladogramWidth}px;
-  }
-
-  & svg.cladogram {
-    position: relative;
-
-    & .node {
-      fill: var(--clr-txt);
-    }
   }
 
   & > table {
@@ -60,10 +53,8 @@ const CladeTable = (props: Props) => {
   const [leafNodeRowHeights, setLeafNodeRowHeights] = React.useState<number[]>([]);
 
   const { parsedNodes, parsedEdges } = React.useMemo(() => {
-    // TODO: make edges grouped by source ~culi
-
+    const edgesBySource = groupByKey(Object.values(data.edges), 'source');
     const nodeYLevels: Record<number, number> = {};
-    // assign initial x,y for leaf nodes
     const parsedNodes = mapObject(data.nodes, (nodeId, node) => {
       nodeYLevels[node.depth] ||= 0;
       nodeYLevels[node.depth]++;
@@ -74,14 +65,14 @@ const CladeTable = (props: Props) => {
         const cumulativeRowHeight = sum(leafNodeRowHeights.slice(0, nodeYLevels[node.depth]));
         y = cumulativeRowHeight - currRowHeight / 2;
       }
-      const x = treeDepth * CLADE_NODE_DISTANCE;
 
-      const outgoingEdges = Object.values(data.edges).filter((edge) => edge.source === nodeId);
+      const x = treeDepth * CLADE_NODE_DISTANCE;
+      const outgoingEdges = edgesBySource[nodeId];
 
       return [nodeId, { ...node, x, y, outgoingEdges }] as const;
     });
 
-    // assign initial x,y for parent nodes
+    // Assign y coordinate for parent nodes.
     Object.values(parsedNodes)
       .filter((node) => node.depth > 1)
       .sort((a, b) => a.depth - b.depth)
