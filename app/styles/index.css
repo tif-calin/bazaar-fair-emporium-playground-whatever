@@ -9,15 +9,6 @@
   line-height: 1.45; /* https://practicaltypography.com/line-spacing.html */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --clr-bg: var(--color-black);
-    --clr-fg: var(--color-offblack);
-    --clr-txt: var(--color-white);
-    --clr-line: var(--color-offwhite);
-  }
-}
-
 html,
 body {
   margin: 0;

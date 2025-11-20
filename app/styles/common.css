@@ -44,3 +44,12 @@
   --fnt-serif: var(--font-transitional);
   --fnt-mono: var(--font-code);
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --clr-bg: var(--color-black);
+    --clr-fg: var(--color-offblack);
+    --clr-txt: var(--color-white);
+    --clr-line: var(--color-offwhite);
+  }
+}
