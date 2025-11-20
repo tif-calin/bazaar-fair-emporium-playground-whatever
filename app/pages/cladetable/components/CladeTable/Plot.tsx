@@ -34,7 +34,7 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
           return (
             <path
               key={edge.id}
-              stroke="black"
+              stroke="var(--clr-line)"
               d={drawEdgePath(
                 parsedNodes[source].x,
                 parsedNodes[source].y,
@@ -53,11 +53,11 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
           return (
             <g className="node" key={node.id} transform={`translate(${node.x}, ${node.y})`}>
               <circle r={1.5} />
-              {isLeafNode && (
+              {/* {isLeafNode && (
                 <text dy="0.25em" dx="0.5em">
                   {node.label || node.id}
                 </text>
-              )}
+              )} */}
             </g>
           );
         })}

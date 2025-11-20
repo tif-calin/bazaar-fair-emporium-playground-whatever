@@ -10,11 +10,18 @@ interface Props {
   title: string;
 }
 
-const VizContainer = styled.div`
+const VizContainer = styled.div<{
+  cladogramWidth: number;
+}>`
   display: flex;
 
-  & > svg.cladogram {
+  & td:has(> svg.cladogram) {
     border: 1px dashed var(--clr-line);
+    min-width: ${(props) => props.cladogramWidth}px;
+  }
+
+  & svg.cladogram {
+    position: relative;
 
     & .node {
       fill: var(--clr-txt);
@@ -24,16 +31,22 @@ const VizContainer = styled.div`
       fill: none;
     }
   }
-`;
-
-const StyledTable = styled.div<{
-  height: number;
-}>`
-  /* border: 1px solid var(--clr-line); */
-  flex-grow: 1;
 
   & > table {
-    height: ${(props) => props.height}px;
+    & thead td {
+      background-color: var(--clr-bg);
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+
+      &:first-child {
+        background-color: unset;
+      }
+    }
+
+    & td {
+      padding: 0 0.25rem;
+    }
   }
 `;
 
@@ -45,7 +58,7 @@ const CladeTable = (props: Props) => {
   const id = useId();
 
   const treeDepth = Math.max(...Object.values(data.nodes).map((node) => node.depth));
-  const vizWidth = treeDepth * CLADE_NODE_DISTANCE + 150;
+  const vizWidth = (treeDepth + 0.5) * CLADE_NODE_DISTANCE;
   const leafCount = Math.max(...Object.values(data.nodes).map((node) => node.leafCount));
   const vizHeight = leafCount * 30;
 
@@ -55,7 +68,7 @@ const CladeTable = (props: Props) => {
     // TODO: make edges grouped by source ~culi
 
     // assign initial x,y for leaf nodes
-    const parsedNodes = mapObject(data.nodes, (nodeId, node, i) => {
+    const parsedNodes = mapObject(data.nodes, (nodeId, node) => {
       nodeYLevels[node.depth] ||= 0;
       nodeYLevels[node.depth]++;
 
@@ -76,75 +89,55 @@ const CladeTable = (props: Props) => {
 
         parsedNodes[node.id] = {
           ...node,
-          // x: ((treeDepth - node.depth + 0.5) / treeDepth) * (treeDepth * 10),
           x: (treeDepth - node.depth + 0.5) * CLADE_NODE_DISTANCE,
           y: (Math.max(...outgoingYs) + Math.min(...outgoingYs)) / 2,
         };
       });
 
-    // Object.values(data.edges).forEach(edge => {
-    //   const { source, target } = edge;
-    // });
-
     return {
       parsedNodes,
       parsedEdges: data.edges,
     };
-  }, []);
+  }, [data.edges, data.nodes, treeDepth]); // TODO fix eslint hooks warning!
+
+  const leafNodes = Object.values(parsedNodes).filter((node) => node.depth === 1);
 
   return (
-    <VizContainer>
-      <svg className="cladogram" id={id} width={vizWidth} viewBox={`0 0 ${vizWidth} ${vizHeight}`}>
-        <Plot parsedNodes={parsedNodes} parsedEdges={parsedEdges} />
-      </svg>
-
-      <StyledTable height={vizHeight} className="table">
-        <table>
-          <thead></thead>
-          <tbody>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
+    <VizContainer cladogramWidth={vizWidth}>
+      <table>
+        <thead>
+          <tr>
+            <td></td>
+            {data.columns.map((col) => (
+              <td key={col.key}>{col.label || col.key}</td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowSpan={leafCount}>
+              <svg
+                className="cladogram"
+                id={id}
+                width={vizWidth}
+                viewBox={`0 0 ${vizWidth} ${vizHeight}`}
+              >
+                <Plot parsedNodes={parsedNodes} parsedEdges={parsedEdges} />
+              </svg>
+            </td>
+            {data.columns.map((col) => (
+              <td key={col.key}>{leafNodes[0].data?.[col.key] || "N/A"}</td>
+            ))}
+          </tr>
+          {leafNodes.slice(1).map((node) => (
+            <tr key={node.id}>
+              {data.columns.map((col) => (
+                <td key={col.key}>{node.data?.[col.key] || "N/A"}</td>
+              ))}
             </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-            <tr>
-              <td>test</td>
-              <td>test</td>
-              <td>test</td>
-            </tr>
-          </tbody>
-        </table>
-      </StyledTable>
+          ))}
+        </tbody>
+      </table>
     </VizContainer>
   );
 };

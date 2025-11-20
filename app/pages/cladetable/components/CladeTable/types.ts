@@ -1,6 +1,9 @@
+import type { ReactNode } from "react";
+
 export type CladeTableNode = {
   id: string;
   label?: string;
+  data?: Record<string, ReactNode>;
 
   /** TODO: move this to ParsedNode ~culi */
   depth: number;
@@ -14,7 +17,13 @@ export type CladeTableEdge = {
   target: CladeTableNode["id"];
 };
 
+type CladeTableColumns = {
+  key: string;
+  label?: string;
+};
+
 export type CladeTableData = {
+  columns: CladeTableColumns[];
   nodes: Record<string, CladeTableNode>;
   edges: Record<string, CladeTableEdge>;
 };

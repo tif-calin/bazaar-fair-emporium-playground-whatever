@@ -7,6 +7,7 @@ const RE_FINAL_SEMICOLON = /;$/;
  *   children?: NewickNode[];
  *   name?: string;
  *   length?: number;
+ *   data?: Record<string, any>;
  * }} NewickNode
  */
 
