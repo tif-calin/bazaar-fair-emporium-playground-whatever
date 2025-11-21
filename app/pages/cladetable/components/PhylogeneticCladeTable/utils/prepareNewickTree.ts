@@ -1,6 +1,6 @@
 import type { NewickNode } from "~/pages/cladetable/utils/parseNewick";
 
-const RE_OTT_NODE_NAME = /^(?<genus>[A-z-]+)_(?<speciesEpitaph>[A-z-]+)_ott(?<ottId>\d+)$/;
+const RE_OTT_NODE_NAME = /^(?<genus>[A-Za-z-]+)_(?<speciesEpitaph>[A-Za-z-]+)_ott(?<ottId>\d+)$/;
 
 /**
  * Takes the ouput of `parseNewick` and prepares it for the `PhylogeneticCladeTable` component by:

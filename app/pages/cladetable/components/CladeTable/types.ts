@@ -20,6 +20,7 @@ export type CladeTableEdge = {
 type CladeTableColumns = {
   key: string;
   label?: string;
+  onRender?: (node: CladeTableNode) => ReactNode;
 };
 
 export type CladeTableData = {

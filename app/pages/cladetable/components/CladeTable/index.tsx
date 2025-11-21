@@ -19,11 +19,17 @@ const VizContainer = styled.div<{
   display: flex;
 
   & td:has(> svg.cladogram) {
-    border: 1px dashed var(--clr-line);
+    border-right: 1px dashed var(--clr-line);
     min-width: ${(props) => props.cladogramWidth}px;
   }
 
   & > table {
+    & td {
+      padding: 0 0.25rem;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
     & thead td:not(:empty) {
       background-color: var(--clr-bg);
       border: 1px solid var(--clr-line);
@@ -32,8 +38,24 @@ const VizContainer = styled.div<{
       white-space: nowrap;
     }
 
-    & td {
-      padding: 0 0.25rem;
+    & tbody {
+      & td {
+        border-right: 1px dashed var(--clr-line);
+      }
+
+      & td > * {
+        align-items: center;
+        display: flex;
+        min-height: 1.5rem;
+      }
+
+      & tr {
+        position: relative;
+
+        &:nth-child(2n) {
+          background: rgb(from var(--clr-txt) r g b / 0.075);
+        }
+      }
     }
   }
 `;
@@ -42,15 +64,14 @@ const CLADE_NODE_DISTANCE = 7;
 
 const CladeTable = (props: Props) => {
   const { data } = props;
-
   const id = useId();
+
+  const [leafNodeRowHeights, setLeafNodeRowHeights] = React.useState<number[]>([]);
 
   const treeDepth = Math.max(...Object.values(data.nodes).map((node) => node.depth));
   const vizWidth = (treeDepth + 0.5) * CLADE_NODE_DISTANCE;
   const leafCount = Math.max(...Object.values(data.nodes).map((node) => node.leafCount));
-  const vizHeight = leafCount * 30;
-
-  const [leafNodeRowHeights, setLeafNodeRowHeights] = React.useState<number[]>([]);
+  const vizHeight = sum(leafNodeRowHeights) || leafCount * 30;
 
   const { parsedNodes, parsedEdges } = React.useMemo(() => {
     const edgesBySource = groupByKey(Object.values(data.edges), 'source');
@@ -63,7 +84,7 @@ const CladeTable = (props: Props) => {
       if (node.leafCount === 1) {
         const currRowHeight = leafNodeRowHeights[nodeYLevels[node.depth] - 1];
         const cumulativeRowHeight = sum(leafNodeRowHeights.slice(0, nodeYLevels[node.depth]));
-        y = cumulativeRowHeight - currRowHeight / 2;
+        y = (cumulativeRowHeight - currRowHeight / 2) || y;
       }
 
       const x = treeDepth * CLADE_NODE_DISTANCE;
@@ -98,7 +119,7 @@ const CladeTable = (props: Props) => {
     const [{ target: tbody }] = entries;
     const trows = tbody.querySelectorAll("tr");
 
-    const heights = Array.from(trows).map((tr) => tr.getBoundingClientRect().height);
+    const heights = Array.from(trows).map((tr) => tr.getBoundingClientRect().height || 0);
     setLeafNodeRowHeights(heights);
   }, []);
   const tbodyRef = useResizeObserver<HTMLTableSectionElement>(handleTbodyResize);
@@ -130,13 +151,23 @@ const CladeTable = (props: Props) => {
               </svg>
             </td>
             {data.columns.map((col) => (
-              <td key={col.key}>{leafNodes[0].data?.[col.key] || "N/A"}</td>
+              <td key={col.key}>
+                {col.onRender
+                  ? col.onRender(leafNodes[0])
+                  : <div>{leafNodes[0].data?.[col.key]}</div>
+                }
+              </td>
             ))}
           </tr>
           {leafNodes.slice(1).map((node) => (
             <tr key={node.id}>
               {data.columns.map((col) => (
-                <td key={col.key}>{node.data?.[col.key] || "N/A"}</td>
+                <td key={col.key}>
+                  {col.onRender
+                    ? col.onRender(node)
+                    : <div>{node.data?.[col.key]}</div>
+                  }
+                </td>
               ))}
             </tr>
           ))}

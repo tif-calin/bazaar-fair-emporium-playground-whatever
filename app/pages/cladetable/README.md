@@ -9,6 +9,25 @@ My goal here is to create a reusable component that renders such visualizations.
 
 ## LOG
 
+### 2025-11-21
+So I've added both major features of columns with custom rendering logic *and* the cladogram supporting dynamic row heights. Both ended up significantly easier than I anticipated. All that's really left is clean up and polish.
+
+The main thing that I'm realizing is that the component is boring without... data. A table with just an OTT ID and a Latin Name column is pretty useless to look at.
+
+I found out an easy way to scrape the `ser-sid.org` database (their apiKey is public). Not sure if I should build my own backend/database or try to make the front-end query it itself. I would also like to hit the `OneZoom` API to get popularity rankings for given taxons (based on the popularity of their corresponding Wikipedia article). I have a private key the OneZoom team graciously provided me with that I don't wanna expose. If I don't build a backend and go for a local-first approach, I'll have to build UI for users to supply their own API keys for such services.
+
+Public APIs:
+- WikiData
+- Seed Information Database
+- Open Tree of Life
+
+Private APIs:
+- OneZoom
+
+There's also a couple of databases that don't have APIs that I'd like to scrape purely for archival/preservation purposes: [X] SID; [ ] PFAF; [x] Ecocrop; [X] Useful Tropical Plants; [ ] Paldat; [ ] NAEB
+
+In addition, I'd like to add certain data points to WikiData from identifiers I've acquired from the above databases.
+
 ### 2025-11-19
 I'm dreading implementing size tracking for the table rows so I'm working on tangental stuff.
 
@@ -20,7 +39,9 @@ Some TODOs I've amassed today:
 - [ ] save textarea input to localStorage and make sure there's a "reset" button
 - [ ] add link to repo in footer
 - [ ] turn a lot of magic numbers into CladeTable#options like the horizontal spacing per "level" and the curvature of the edges
-- [ ] for the `columns` API, add an optional function to decide how to render the cell content. Will have to do some digging into react table libraries to find an idiomatic convention.
+- [ ] for the `columns` API, add an optional function to decide how to render the cell content. Will have to do some digging into react table libraries to find an idiomatic convention
+- [ ] support parsing of NHX features
+- [ ] read from a latin name, fetch WikiData, use that to get OneZoom and various other APIs.
 
 Thanks to [Timur Kelman](https://stackoverflow.com/questions/40843210).
 
