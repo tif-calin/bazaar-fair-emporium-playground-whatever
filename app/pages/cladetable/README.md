@@ -24,7 +24,7 @@ Public APIs:
 Private APIs:
 - OneZoom
 
-There's also a couple of databases that don't have APIs that I'd like to scrape purely for archival/preservation purposes: [X] SID; [ ] PFAF; [x] Ecocrop; [X] Useful Tropical Plants; [ ] Paldat; [ ] NAEB
+There's also a couple of databases that don't have APIs that I'd like to scrape purely for archival/preservation purposes: [X] SID; [ ] PFAF; [x] Ecocrop; [X] Useful Tropical Plants; [ ] Paldat; [ ] NAEB; [ ] florapal.org
 
 In addition, I'd like to add certain data points to WikiData from identifiers I've acquired from the above databases.
 

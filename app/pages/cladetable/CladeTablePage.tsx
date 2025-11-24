@@ -1,19 +1,25 @@
 import { styled } from "@linaria/react";
 import React from "react";
 import PhylogeneticCladeTable from "./components/PhylogeneticCladeTable";
+import ToolBar from './components/ToolBar';
 
 const Page = styled.div`
+  --clr-focus: var(--oc-orange-4);
+  --msr-radius: 0.15rem;
+
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 0.5rem;
   margin: auto;
+  min-height: calc(100vh - 2rem);
   padding: 1rem;
+  position: relative;
 
-  & > *:where(header, main, footer):not(:empty) {
+  & > *:where(header, main):not(:empty) {
     background-color: var(--clr-fg);
     border: 1px double var(--clr-line);
-    border-radius: 0.125rem;
+    border-radius: var(--msr-radius);
     border-bottom: 4px double var(--clr-line);
     padding: 1rem;
     width: 100%;
@@ -37,6 +43,7 @@ const CladeTablePage = () => {
         <h1>CladeTable</h1>
       </header>
       <main>
+        <ToolBar />
         {/* <LatinToOttid /> */}
         <PhylogeneticCladeTable />
       </main>
