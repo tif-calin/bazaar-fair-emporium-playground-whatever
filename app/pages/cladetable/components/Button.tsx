@@ -12,7 +12,7 @@ const StyledButton = styled.button`
   font-weight: 500;
   padding: 0 0.5rem;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--clr-bg-hover);
     color: unset;
   }
@@ -20,6 +20,11 @@ const StyledButton = styled.button`
   &:focus {
     outline: 2px dashed var(--clr-focus);
     border-color: #0000;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 `;
 

@@ -1,5 +1,12 @@
-import './styles/index.css';
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import "./styles/index.css";
+import {
+  isRouteErrorResponse,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "react-router";
 import type { Route } from "./+types/root";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -18,7 +25,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       </body>
     </html>
   );
-}
+};
 
 export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
   let message = "Oops!";
@@ -28,9 +35,7 @@ export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
     details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
@@ -47,8 +52,9 @@ export const ErrorBoundary = ({ error }: Route.ErrorBoundaryProps) => {
       )}
     </main>
   );
-}
+};
 
+/** Note: StrictMode is enabled by default in Remix. */
 const App = () => {
   return <Outlet />;
 };

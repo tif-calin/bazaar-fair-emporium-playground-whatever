@@ -16,6 +16,7 @@
     "@linaria/react": "^6.3.0",
     "@react-router/node": "^7.4.1",
     "@react-router/serve": "^7.4.1",
+    "@tanstack/react-query": "^5.90.10",
     "isbot": "^5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
