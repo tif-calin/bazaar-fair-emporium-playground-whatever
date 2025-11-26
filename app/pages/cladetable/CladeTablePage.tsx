@@ -31,10 +31,23 @@ const Page = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    flex-grow: 1;
     min-height: 50vh;
   }
+
+  & > footer {
+    margin-top: auto;
+
+    &:hover a {
+      &::before,
+      &::after {
+        content: "\\2620";
+      }
+    }
+  }
 `;
+
+// eslint-disable-next-line max-len
+const SOURCE_URL = "https://github.com/tif-calin/bazaar-fair-emporium-playground-whatever/tree/main/app/pages/cladetable";
 
 const CladeTablePage = () => {
   return (
@@ -44,10 +57,11 @@ const CladeTablePage = () => {
       </header>
       <main>
         <ToolBar />
-        {/* <LatinToOttid /> */}
         <PhylogeneticCladeTable />
       </main>
-      <footer></footer>
+      <footer>
+        <a href={SOURCE_URL}> steal this </a>
+      </footer>
     </Page>
   );
 };
