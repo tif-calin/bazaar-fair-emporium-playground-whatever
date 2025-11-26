@@ -1,28 +1,26 @@
-import React from "react";
-import Input from "../Input";
-import Button from "../Button";
-import { styled } from "@linaria/react";
-import useLocalStorage from "~/utils/useLocalStorage";
-import { useQuery } from "@tanstack/react-query";
-import { orchestrateInducedTree } from "./utils/orchestrateInducedTree";
+import React from 'react';
+import Input from '../Input';
+import Button from '../Button';
+import { styled } from '@linaria/react';
+import useLocalStorage from '~/utils/useLocalStorage';
+import { orchestrateInducedTree } from './utils/orchestrateInducedTree';
 
 const FormContainer = styled.form`
   display: flex;
   gap: 0.5rem;
 `;
 
-/**
- * 1. Fetch WikiData ID.
- * 2. Use that to get OTT ID.
- * 3. Use OTT ID to find other closely related taxa.
- * 4. Get popularity rankings for each of those taxa and only keep the most popular.
- */
-const RelatedAndWellKnownSpeciesForm = () => {
+const RelatedAndWellKnownSpeciesForm = ({
+  setNewickTree,
+}: {
+  setNewickTree: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const formId = React.useId();
 
-  const [oneZoomApiKey] = useLocalStorage("oneZoomApiKey", "");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [oneZoomApiKey] = useLocalStorage('oneZoomApiKey', '');
 
-  const [savedLatinName, setSavedLatinName] = useLocalStorage("savedLatinName", "");
+  const [savedLatinName, setSavedLatinName] = useLocalStorage('savedLatinName', '');
   const [inputtedLatinName, setInputtedLatinName] = React.useState(savedLatinName);
   // TODO: get species from url query param
 
@@ -32,21 +30,22 @@ const RelatedAndWellKnownSpeciesForm = () => {
   );
 
   const handleFormAction = React.useCallback(
-    (formData: FormData) => {
-      const latinName = formData.get("latinName");
-      if (typeof latinName == "string") setSavedLatinName(latinName || "");
+    async (formData: FormData) => {
+      console.count('handleFormAction');
+      const latinName = formData.get('latinName');
+      if (typeof latinName !== 'string') return;
+
+      setIsLoading(true);
+      setSavedLatinName(latinName || '');
+      const { newick } = await orchestrateInducedTree(savedLatinName, {
+        oneZoomApiKey,
+        oneZoomMaxQuery: oneZoomApiKey === '0' ? 100 : 3270,
+      });
+      setNewickTree(newick);
+      setIsLoading(false);
     },
-    [setSavedLatinName]
+    [oneZoomApiKey, savedLatinName, setNewickTree, setSavedLatinName]
   );
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["wikidata", savedLatinName],
-    queryFn: () => orchestrateInducedTree(savedLatinName, oneZoomApiKey),
-    staleTime: 1_000 * 60, // 1 minute
-    enabled: !!inputtedLatinName,
-  });
-
-  console.log({ inputtedLatinName, savedLatinName, isLoading, error, data });
 
   return (
     <FormContainer id={formId} action={handleFormAction}>

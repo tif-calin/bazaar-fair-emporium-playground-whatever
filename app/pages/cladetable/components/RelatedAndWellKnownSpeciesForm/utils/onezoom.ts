@@ -39,7 +39,7 @@ export const getPopularityList = async (
     key,
     otts,
     expand_taxa: "True",
-    max: `${max}`,
+    max: `${key === '0' ? Math.max(max, 100) :max}`,
     names: "True",
     include_raw: "True",
     sort: "raw",

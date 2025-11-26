@@ -1,6 +1,6 @@
-import { countLeaves, findDepth } from "~/pages/cladetable/utils/graphs";
-import type { NewickNode } from "~/pages/cladetable/utils/parseNewick.js";
-import type { CladeTableData } from "../types";
+import { countLeaves, findDepth } from '~/pages/cladetable/utils/graphs';
+import type { NewickNode } from '~/pages/cladetable/utils/parseNewick.js';
+import type { CladeTableData } from '../types';
 
 let id = 0;
 const nodeToId = new Map<NewickNode, string>();
@@ -10,25 +10,27 @@ const nodeToId = new Map<NewickNode, string>();
  */
 const parseTreeForCladeTable = (
   node: NewickNode,
-  { nodes, edges }: Pick<CladeTableData, "nodes" | "edges"> = { nodes: {}, edges: {} }
+  { nodes, edges }: Pick<CladeTableData, 'nodes' | 'edges'> = { nodes: {}, edges: {} },
+  lineage: string[] = []
 ) => {
   if (!nodeToId.has(node)) nodeToId.set(node, `node:${id++}`);
-
   const nodeId = nodeToId.get(node)!;
+
   nodes[nodeId] = {
     id: nodeId,
     ...node,
     label: node.name,
     depth: findDepth(node),
     leafCount: countLeaves(node),
+    data: { lineage, ...node.data },
   };
 
-  node.children?.forEach((child) => {
+  node.children?.forEach(child => {
     const edgeId = `edge:${id++}`;
     edges[edgeId] = {
       id: edgeId,
       source: nodeId,
-      target: parseTreeForCladeTable(child, { nodes, edges })[0],
+      target: parseTreeForCladeTable(child, { nodes, edges }, [...lineage, nodeId])[0],
     };
   });
 

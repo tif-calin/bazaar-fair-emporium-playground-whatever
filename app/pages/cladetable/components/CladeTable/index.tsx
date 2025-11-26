@@ -1,8 +1,8 @@
-import React, { useId } from "react";
-import { styled } from "@linaria/react";
-import type { CladeTableData } from "./types";
-import { mapObject } from "~/utils/object";
-import Plot from "./Plot";
+import React, { useId } from 'react';
+import { styled } from '@linaria/react';
+import type { CladeTableData } from './types';
+import { mapObject } from '~/utils/object';
+import Plot from './Plot';
 import useResizeObserver from '~/utils/useResizeObserver';
 import { sum } from '~/utils/numbers';
 import { groupByKey } from '~/utils/collections';
@@ -20,7 +20,7 @@ const VizContainer = styled.div<{
 
   & td:has(> svg.cladogram) {
     border-right: 1px dashed var(--clr-line);
-    min-width: ${(props) => props.cladogramWidth}px;
+    min-width: ${props => props.cladogramWidth}px;
   }
 
   & > table {
@@ -68,9 +68,9 @@ const CladeTable = (props: Props) => {
 
   const [leafNodeRowHeights, setLeafNodeRowHeights] = React.useState<number[]>([]);
 
-  const treeDepth = Math.max(...Object.values(data.nodes).map((node) => node.depth));
+  const treeDepth = Math.max(...Object.values(data.nodes).map(node => node.depth));
   const vizWidth = (treeDepth + 0.5) * CLADE_NODE_DISTANCE;
-  const leafCount = Math.max(...Object.values(data.nodes).map((node) => node.leafCount));
+  const leafCount = Math.max(...Object.values(data.nodes).map(node => node.leafCount));
   const vizHeight = sum(leafNodeRowHeights) || leafCount * 30;
 
   const { parsedNodes, parsedEdges } = React.useMemo(() => {
@@ -80,11 +80,11 @@ const CladeTable = (props: Props) => {
       nodeYLevels[node.depth] ||= 0;
       nodeYLevels[node.depth]++;
 
-      let y = ((nodeYLevels[node.depth] - 0.5) * 30);
+      let y = (nodeYLevels[node.depth] - 0.5) * 30;
       if (node.leafCount === 1) {
         const currRowHeight = leafNodeRowHeights[nodeYLevels[node.depth] - 1];
         const cumulativeRowHeight = sum(leafNodeRowHeights.slice(0, nodeYLevels[node.depth]));
-        y = (cumulativeRowHeight - currRowHeight / 2) || y;
+        y = cumulativeRowHeight - currRowHeight / 2 || y;
       }
 
       const x = treeDepth * CLADE_NODE_DISTANCE;
@@ -95,10 +95,10 @@ const CladeTable = (props: Props) => {
 
     // Assign y coordinate for parent nodes.
     Object.values(parsedNodes)
-      .filter((node) => node.depth > 1)
-      .sort((a, b) => a.depth - b.depth)
-      .forEach((node) => {
-        const outgoingYs = node.outgoingEdges.map((edge) => parsedNodes[edge.target].y);
+      .filter(node => node.depth > 1)
+      .toSorted((a, b) => a.depth - b.depth)
+      .forEach(node => {
+        const outgoingYs = node.outgoingEdges.map(edge => parsedNodes[edge.target].y);
 
         parsedNodes[node.id] = {
           ...node,
@@ -111,29 +111,29 @@ const CladeTable = (props: Props) => {
       parsedNodes,
       parsedEdges: data.edges,
     };
-  }, [data.edges, data.nodes, treeDepth, leafNodeRowHeights]); // TODO fix eslint hooks warning!
+  }, [data.edges, data.nodes, treeDepth, leafNodeRowHeights]);
 
-  const handleTbodyResize = React.useCallback<ResizeObserverCallback>((entries) => {
+  const handleTbodyResize = React.useCallback<ResizeObserverCallback>(entries => {
     if (!entries?.length) return;
 
     const [{ target: tbody }] = entries;
-    const trows = tbody.querySelectorAll("tr");
+    const trows = tbody.querySelectorAll('tr');
 
-    const heights = Array.from(trows).map((tr) => tr.getBoundingClientRect().height || 0);
+    const heights = Array.from(trows).map(tr => tr.getBoundingClientRect().height || 0);
     setLeafNodeRowHeights(heights);
   }, []);
   const tbodyRef = useResizeObserver<HTMLTableSectionElement>(handleTbodyResize);
 
-  const leafNodes = Object.values(parsedNodes).filter((node) => node.depth === 1);
+  const leafNodes = Object.values(parsedNodes).filter(node => node.depth === 1);
 
   return (
     <VizContainer cladogramWidth={vizWidth}>
       <table>
-        {/* <caption>{props.title}</caption> */}
+        {/* TODO: <caption>{props.title}</caption> */}
         <thead>
           <tr>
             <td />
-            {data.columns.map((col) => (
+            {data.columns.map(col => (
               <td key={col.key}>{col.label || col.key}</td>
             ))}
           </tr>
@@ -150,23 +150,21 @@ const CladeTable = (props: Props) => {
                 <Plot parsedNodes={parsedNodes} parsedEdges={parsedEdges} />
               </svg>
             </td>
-            {data.columns.map((col) => (
+            {data.columns.map(col => (
               <td key={col.key}>
-                {col.onRender
-                  ? col.onRender(leafNodes[0])
-                  : <div>{leafNodes[0].data?.[col.key]}</div>
-                }
+                {col.onRender ? (
+                  col.onRender(leafNodes[0])
+                ) : (
+                  <div>{leafNodes[0].data?.[col.key]}</div>
+                )}
               </td>
             ))}
           </tr>
-          {leafNodes.slice(1).map((node) => (
+          {leafNodes.slice(1).map(node => (
             <tr key={node.id}>
-              {data.columns.map((col) => (
+              {data.columns.map(col => (
                 <td key={col.key}>
-                  {col.onRender
-                    ? col.onRender(node)
-                    : <div>{node.data?.[col.key]}</div>
-                  }
+                  {col.onRender ? col.onRender(node) : <div>{node.data?.[col.key]}</div>}
                 </td>
               ))}
             </tr>
