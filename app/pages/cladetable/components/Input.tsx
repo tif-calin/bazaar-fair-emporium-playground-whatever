@@ -1,9 +1,9 @@
-import { styled } from "@linaria/react";
-import { memo, useId, type InputHTMLAttributes } from "react";
+import { styled } from '@linaria/react';
+import { memo, useId, type InputHTMLAttributes } from 'react';
 
 type HtmlInputAttributes<
   InputType extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
-  RequiredFields extends keyof InputType
+  RequiredFields extends keyof InputType,
 > = InputHTMLAttributes<InputType> & Pick<Required<InputType>, RequiredFields>;
 
 const InputStyled = styled.div<{ gridSpan: number }>`
@@ -20,7 +20,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
   color: var(--clr-text);
   display: flex;
    flex-grow: 1;
-  grid-column: span ${(props) => props.gridSpan};
+  grid-column: span ${props => props.gridSpan};
   padding: 0;
   position: relative;
 
@@ -90,18 +90,19 @@ type Props = {
   /** Success state turns label text green. */
   status?: 'disabled' | 'error' | 'success';
 } & (
-  | ({ kind: 'number' | 'text'; } & HtmlInputAttributes<HTMLInputElement, 'name' | 'type'>)
-  | ({ kind: 'select'; options: Array<{ value: string; label: string }>; } & HtmlInputAttributes<HTMLSelectElement, 'name'>)
-  | ({ kind: 'textarea'; } & HtmlInputAttributes<HTMLTextAreaElement, 'name'>)
+  | ({ kind: 'number' | 'text' } & HtmlInputAttributes<
+      HTMLInputElement,
+      'name' | 'type'
+    >)
+  | ({
+      kind: 'select';
+      options: Array<{ value: string; label: string }>;
+    } & HtmlInputAttributes<HTMLSelectElement, 'name'>)
+  | ({ kind: 'textarea' } & HtmlInputAttributes<HTMLTextAreaElement, 'name'>)
 );
 
 const Input = (props: Props) => {
-  const {
-    label,
-    gridSpan = 12,
-    status,
-    ...inputProps
-  } = props;
+  const { label, gridSpan = 12, status, ...inputProps } = props;
 
   const id = useId();
 
