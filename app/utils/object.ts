@@ -6,3 +6,10 @@ export const mapObject = <U, T extends Record<string, T[keyof T]> = Record<strin
   fn: (key: keyof T, value: T[keyof T], i: number, array: [keyof T, T[keyof T]][]) => [string, U]
 ): Record<ReturnType<typeof fn>[0], ReturnType<typeof fn>[1]> =>
   Object.fromEntries(Object.entries(object).map(([k, v], ...rest) => fn(k, v, ...rest)));
+
+/**
+ * A type-preserving version of Object.fromEntries().
+ */
+export const objectFromEntries = <T extends ReadonlyArray<readonly [PropertyKey, unknown]>>(
+  entries: T
+) => Object.fromEntries(entries) as { [K in T[number] as K[0]]: K[1] };

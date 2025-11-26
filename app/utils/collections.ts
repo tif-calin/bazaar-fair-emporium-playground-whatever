@@ -46,3 +46,13 @@ export const groupByKey = <Obj extends { [key in Key]: PropertyKey }, Key extend
     acc[typename].push(item);
     return acc;
   }, {} as Record<Obj[Key], Obj[]>);
+
+/**
+ * @example
+ * ```ts
+ * const example = [{ foo: 'bar' }, null, undefined, { foo: 'qux' }].filter(notEmpty);
+ * #      ^? Array<{ foo: string }>
+ * ```
+ */
+export const notEmpty = <TValue>(value: TValue | null | undefined): value is TValue =>
+  value !== null && value !== undefined;

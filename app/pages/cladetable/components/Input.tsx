@@ -1,5 +1,5 @@
-import { styled } from '@linaria/react';
-import { memo, useId, type InputHTMLAttributes } from 'react';
+import { styled } from "@linaria/react";
+import { memo, useId, type InputHTMLAttributes } from "react";
 
 type HtmlInputAttributes<
   InputType extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
@@ -20,7 +20,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
   color: var(--clr-text);
   display: flex;
    flex-grow: 1;
-  grid-column: span ${props => props.gridSpan};
+  grid-column: span ${(props) => props.gridSpan};
   padding: 0;
   position: relative;
 
@@ -71,7 +71,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
   }
 
   & > :where(input, select) {
-    height: 1.5rem;
+    height: 1.25rem;
   }
 
   & > :where(textarea) {

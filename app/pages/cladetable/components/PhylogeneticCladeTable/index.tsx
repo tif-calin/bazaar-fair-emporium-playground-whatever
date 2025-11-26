@@ -6,6 +6,7 @@ import { styled } from "@linaria/react";
 import prepareNewickTree from './utils/prepareNewickTree';
 import type { CladeTableData } from '../CladeTable/types';
 import Input from '../Input';
+import RelatedAndWellKnownSpeciesForm from '../RelatedAndWellKnownSpeciesForm';
 
 const DEFAULT_NEWICK =
   "((((Solanum_galapagense_ott200836,((Solanum_cheesmaniae_ott242855,Solanum_pimpinellifolium_ott797186),(Solanum_lycopersicum_var._cerasiforme_ott640492)Solanum_lycopersicum_ott378964)),(Solanum_chmielewskii_ott360692,(Solanum_pennellii_var._puberulum_ott508882)Solanum_pennellii_ott1069768)),(Solanum_chilense_ott378983,('[Lycopersicon] peruvianum var. humifusum ott837938','[Lycopersicon] peruvianum var. dentatum ott856663')Solanum_peruvianum_ott378975)),((Lycopersicon_hirsutum_f._glabratum_ott807666)Solanum_habrochaites_ott885264,Solanum_neorickii_ott885270));";
@@ -13,6 +14,7 @@ const DEFAULT_NEWICK =
 const InputSection = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
 
   & textarea {
     font-family: var(--fnt-mono);
@@ -79,6 +81,7 @@ const PhylogeneticCladeTable = () => {
       <CladeTable title="example" id="example" data={cladeTableData} />
       <Hr />
       <InputSection>
+        <RelatedAndWellKnownSpeciesForm />
         <Input
           kind="textarea"
           name="newick"
