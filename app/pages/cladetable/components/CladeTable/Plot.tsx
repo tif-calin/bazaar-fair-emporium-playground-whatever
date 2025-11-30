@@ -1,9 +1,9 @@
-import React from "react";
-import type { CladeTableEdge, CladeTableNode } from "./types";
+import React from 'react';
+import type { CladeTableEdge, CladeTableNode } from './types';
 
 interface Props {
-  parsedNodes: Record<CladeTableNode["id"], CladeTableNode & { x: number; y: number }>;
-  parsedEdges: Record<CladeTableEdge["id"], CladeTableEdge>;
+  parsedNodes: Record<CladeTableNode['id'], CladeTableNode & { x: number; y: number }>;
+  parsedEdges: Record<CladeTableEdge['id'], CladeTableEdge>;
 }
 
 const drawEdgePath = (sourceX: number, sourceY: number, targetX: number, targetY: number) => {
@@ -28,7 +28,7 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
   return (
     <g className="plot">
       <g className="edges">
-        {Object.values(parsedEdges).map((edge) => {
+        {Object.values(parsedEdges).map(edge => {
           const { source, target } = edge;
 
           return (
@@ -48,7 +48,7 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
       </g>
 
       <g className="nodes">
-        {Object.values(parsedNodes).map((node) => {
+        {Object.values(parsedNodes).map(node => {
           const isLeafNode = node.depth === 1;
 
           return (
@@ -61,7 +61,7 @@ const Plot = ({ parsedNodes, parsedEdges }: Props) => {
               <circle r={1.5} />
               {isLeafNode && (
                 <text dy="0.25em" dx="0.5em">
-                  {node.id}
+                  {node.label}
                 </text>
               )}
             </g>

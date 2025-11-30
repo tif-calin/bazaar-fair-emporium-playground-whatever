@@ -1,16 +1,31 @@
-import { styled } from "@linaria/react";
-import React from "react";
-import PhylogeneticCladeTable from "./components/PhylogeneticCladeTable";
+import { styled } from '@linaria/react';
+import React from 'react';
+import PhylogeneticCladeTable from './components/PhylogeneticCladeTable';
 import ToolBar from './components/ToolBar';
+
+const bgSvg = btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+  <filter id="noise" x="0" y="0">
+    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="5" stitchTiles="stitch"/>
+    <feBlend mode="screen"/>
+  </filter>
+  <filter id="noise2" x="0" y="0">
+    <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="1" stitchTiles="stitch"/>
+    <feBlend mode="screen"/>
+  </filter>
+  <rect width="500" height="500" filter="url(#noise)" opacity="0.40"/>
+  <rect width="500" height="500" filter="url(#noise2)" opacity="0.1"/>
+</svg>
+`);
 
 const Page = styled.div`
   --clr-focus: var(--oc-orange-4);
   --msr-radius: 0.15rem;
 
+  background-image: url("data:image/svg+xml;base64,${bgSvg}");
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 0.5rem;
+   align-items: center;
+   flex-direction: column;
+   gap: 0.5rem;
   margin: auto;
   min-height: calc(100vh - 2rem);
   padding: 1rem;
@@ -18,7 +33,7 @@ const Page = styled.div`
 
   & > *:where(header, main):not(:empty) {
     background-color: var(--clr-fg);
-    border: 1px double var(--clr-line);
+    border: 1px solid var(--clr-line);
     border-radius: var(--msr-radius);
     border-bottom: 4px double var(--clr-line);
     padding: 1rem;
@@ -46,8 +61,9 @@ const Page = styled.div`
   }
 `;
 
-// eslint-disable-next-line max-len
-const SOURCE_URL = "https://github.com/tif-calin/bazaar-fair-emporium-playground-whatever/tree/main/app/pages/cladetable";
+const SOURCE_URL =
+  // eslint-disable-next-line max-len
+  'https://github.com/tif-calin/bazaar-fair-emporium-playground-whatever/tree/main/app/pages/cladetable';
 
 const CladeTablePage = () => {
   return (

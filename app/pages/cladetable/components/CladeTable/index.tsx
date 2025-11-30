@@ -17,6 +17,7 @@ const VizContainer = styled.div<{
   cladogramWidth: number;
 }>`
   display: flex;
+  overflow: auto;
 
   & td:has(> svg.cladogram) {
     border-right: 1px dashed var(--clr-line);
@@ -107,10 +108,7 @@ const CladeTable = (props: Props) => {
         };
       });
 
-    return {
-      parsedNodes,
-      parsedEdges: data.edges,
-    };
+    return { parsedNodes, parsedEdges: data.edges };
   }, [data.edges, data.nodes, treeDepth, leafNodeRowHeights]);
 
   const handleTbodyResize = React.useCallback<ResizeObserverCallback>(entries => {

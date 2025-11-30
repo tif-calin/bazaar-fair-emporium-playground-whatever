@@ -10,6 +10,7 @@ const StyledButton = styled.button`
    border-radius: var(--msr-radius);
   color: var(--clr-txt);
   font-weight: 500;
+  height: 1.6rem;
   padding: 0 0.5rem;
 
   &:hover:not(:disabled) {
@@ -34,11 +35,7 @@ type Props = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = (props: Props) => {
-  const {
-    className,
-    children,
-    ...buttonAttrs
-  } = props;
+  const { className, children, ...buttonAttrs } = props;
 
   return (
     <StyledButton className={className} {...buttonAttrs}>

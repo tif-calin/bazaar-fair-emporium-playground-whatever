@@ -1,6 +1,6 @@
-import { styled } from "@linaria/react";
-import React from "react";
-import DataOverview from "./components/DataOverview";
+import { styled } from '@linaria/react';
+import React from 'react';
+import DataOverview from './components/DataOverview';
 
 const Page = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ const Page = styled.div`
 
   & > *:where(header, main, footer):not(:empty) {
     background-color: var(--clr-fg);
-    border: 1px double var(--clr-line);
+    border: 1px solid var(--clr-line);
     border-radius: 0.125rem;
     border-bottom: 4px double var(--clr-line);
     padding: 1rem;

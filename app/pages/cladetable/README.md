@@ -9,8 +9,34 @@ My goal here is to create a reusable component that renders such visualizations.
 
 ## LOG
 
+### 2025-11-30
+
+#### useSyncExternalStore
+I redid the useLocalStorage hook to utilize useSyncExternalStore and tbh I kinda hate it though I see the benefits.
+
+#### newicks and csvs
+The idea of a component that takes in a newick string and a csv string still greatly appeals to me but I've been thinking about alternative newick formats like NHX which is an extension of the newick format that allows for the annotation of nodes with additional properties. It looks something like this:
+
+```newick
+(A[&&NHX:S=human,E=1.1.1]:0.1,B[&&NHX])C[&&NHX:S=primates];
+```
+
+The `&&NHX` declaration is my least favorite part of this. It reminds me of [urn's in XML] which are arbitrary namespace declarations. I consider NHX more of a namespace than a data format because those attributes (e.g. `S`, `E`, etc) are precisely defined in the spec. In most data formats, a namespace declaration is done once. In NHX it's littered throughout the string whenever we wanna annotate a node. I also dislike the special `&&` syntax instead of just using something like `nodeA[format=NHX,S=human]`.
+
+Anyways, all that is to say that I think there's an obvious generalization here of the format for any arbitrary data annotation. If I went in that direction, I could simplify the input to a single `newick` string instead of having to manage a csv file that needs to have corresponding ids. I like the idea but the main thing stopping me is the (surprising) lack of a standardized format NHX-like newick formats.
+
+#### unparseNewick
+I've also added an inverse function to `parseNewick` which actually turned out to be quite elegant and straightforward. This will make it easy to modify a newick tree by first transforming it into JSON and editing it programmatically then converting it back to a newick string.
+
+### 2025-11-26
+I've pretty much refucktored it to account for relatedness in a more sophisticated and dynamic way. One major limitation that still exists is when the entire lineage of a leaf node is non-monophyletic (e.g. *Sansevieria trifasciata*). In that case, we go all the way up to Mesangiospermae (core angiosperms) which contains 378,059 tips currently. Understandibly, the OpenTreeOfLife API says "yeah I'm not sending you all that" and errors out. Since I'm trying to avoid a backend for as long as possible, I don't really have a good solution for this beyond cacheing the entire tree. Hmmm, I suppose I could lazy load a giant newick file as an ultimate fallback since the case is pretty uncommon. I just checked and it's only 1.7MB for the `grafted_solution.tre` output (which doesn't include latin names) or 4.4MB for the `grafted_solution_ottnames.tre` output (which does include latin names).
+
+Priorities:
+- [ ] Extensive caching so I don't spam these APIs if I do publicly release this tool.
+- [ ] Ability for component to take in a csv file for the attributes of the "table" part of this diagram.
+
 ### 2025-11-25
-Okay so a lot has happened since the last log. I've added UI elements like buttons and inputs and redid a lot of the CSS to make a more consistent feel. I'm making my UI elements from scratch (well partially copied from other projects I've had) and it's been interesting to rebuild things from the ground up. I only found out about `FormData` and the `action` attribute on a `<form>` about a month ago and I've been using those to make a more "use the platform" set of UI elements.
+A lot has happened since the last log. I've added UI elements like buttons and inputs and redid a lot of the CSS to make a more consistent feel. I'm making my UI elements from scratch (well partially copied from other projects I've had) and it's been interesting to rebuild things from the ground up. I only found out about `FormData` and the `action` attribute on a `<form>` about a month ago and I've been using those to make a more "use the platform" set of UI elements.
 
 Anyways I used those elements along with the nifty new-ish `<dialog>` element to create a "settings" dialog that will be used for users to provide their own API keys for particular APIs. Right now, it's really just for me to utilize my OneZoom API key without saving it anywhere. Oh and while building my `useLocalStorage` hook, I found out about `[useSyncExternalStore](https://react.dev/reference/react/useSyncExternalStore)` which seems like a pretty neat tool as React works towards more integration with server components. But I also want to use it to improve my `useLocalStorage` hook and prevent hydration issues. That should also make it safer for me to access localStorage from different parts of my app.
 
@@ -41,7 +67,7 @@ An incredible discovery I've made while working on this is that OpenTreeOfLife h
 Thanks [Jules Blom](https://julesblom.com/writing/usesyncexternalstore).
 
 ### 2025-11-21
-So I've added both major features of columns with custom rendering logic *and* the cladogram supporting dynamic row heights. Both ended up significantly easier than I anticipated. All that's really left is clean up and polish.
+I've added both major features of columns with custom rendering logic *and* the cladogram supporting dynamic row heights. Both ended up significantly easier than I anticipated. All that's really left is clean up and polish.
 
 The main thing that I'm realizing is that the component is boring without... data. A table with just an OTT ID and a Latin Name column is pretty useless to look at.
 
@@ -55,7 +81,7 @@ Public APIs:
 Private APIs:
 - OneZoom
 
-There's also a couple of databases that don't have APIs that I'd like to scrape purely for archival/preservation purposes: [X] SID; [ ] PFAF; [x] Ecocrop; [X] Useful Tropical Plants; [ ] Paldat; [ ] NAEB; [ ] florapal.org
+There's also a couple of databases that don't have APIs that I'd like to scrape purely for archival/preservation purposes: [X] SID; [ ] PFAF; [x] Ecocrop; [X] Useful Tropical Plants; [ ] Paldat; [ ] NAEB; [ ] florapal.org; [ ] Feedipedia
 
 In addition, I'd like to add certain data points to WikiData from identifiers I've acquired from the above databases.
 

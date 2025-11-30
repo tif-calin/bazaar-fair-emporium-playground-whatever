@@ -37,7 +37,7 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     border-radius: var(--msr-radius);
     pointer-events: none;
     position: absolute;
-     top: 0.5rem;
+     top: 0.3rem;
      left: 0.5rem;
     transition: all 0.15s ease-in-out;
      transition-property: top, left, color;
@@ -70,8 +70,8 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     &:invalid + .label { color: var(--clr-error); }
   }
 
-  & > :where(input, select) {
-    height: 1.25rem;
+  &:has(> :where(input, select)) {
+    height: 1.6rem;
   }
 
   & > :where(textarea) {
@@ -90,14 +90,11 @@ type Props = {
   /** Success state turns label text green. */
   status?: 'disabled' | 'error' | 'success';
 } & (
-  | ({ kind: 'number' | 'text' } & HtmlInputAttributes<
-      HTMLInputElement,
-      'name' | 'type'
+  | ({ kind: 'number' | 'text' } & HtmlInputAttributes<HTMLInputElement, 'name' | 'type'>)
+  | ({ kind: 'select'; options: Array<{ value: string; label: string }> } & HtmlInputAttributes<
+      HTMLSelectElement,
+      'name'
     >)
-  | ({
-      kind: 'select';
-      options: Array<{ value: string; label: string }>;
-    } & HtmlInputAttributes<HTMLSelectElement, 'name'>)
   | ({ kind: 'textarea' } & HtmlInputAttributes<HTMLTextAreaElement, 'name'>)
 );
 
@@ -108,9 +105,7 @@ const Input = (props: Props) => {
 
   return (
     <InputStyled gridSpan={gridSpan} className={status}>
-      {inputProps.kind === 'number' && (
-        <input id={id} placeholder="&nbsp;" {...inputProps} />
-      )}
+      {inputProps.kind === 'number' && <input id={id} placeholder="&nbsp;" {...inputProps} />}
       {inputProps.kind === 'select' && (
         <select id={id} {...inputProps}>
           {inputProps.options?.map(opt => (
@@ -120,12 +115,8 @@ const Input = (props: Props) => {
           ))}
         </select>
       )}
-      {inputProps.kind === 'text' && (
-        <input id={id} placeholder="&nbsp;" {...inputProps} />
-      )}
-      {inputProps.kind === 'textarea' && (
-        <textarea id={id} placeholder="&nbsp;" {...inputProps} />
-      )}
+      {inputProps.kind === 'text' && <input id={id} placeholder="&nbsp;" {...inputProps} />}
+      {inputProps.kind === 'textarea' && <textarea id={id} placeholder="&nbsp;" {...inputProps} />}
       <label className="label" htmlFor={id}>
         {label || inputProps.placeholder || inputProps.name}
       </label>
