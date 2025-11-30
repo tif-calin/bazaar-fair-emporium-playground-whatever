@@ -1,5 +1,5 @@
 import { countLeaves, findDepth } from '~/pages/cladetable/utils/graphs';
-import type { NewickNode } from '~/pages/cladetable/utils/parseNewick.js';
+import type { NewickNode } from '~/pages/cladetable/utils/newick.js';
 import type { CladeTableData } from '../types';
 
 let id = 0;

@@ -15,7 +15,7 @@ const RE_FINAL_SEMICOLON = /;$/;
  * @param {string} newick
  * @returns {NewickNode}
  */
-const parseNewick = (newick) => {
+export const parseNewick = (newick) => {
   /** @type {NewickNode} */
   let tree = {};
   /** @type {NewickNode[]} */
@@ -62,4 +62,23 @@ const parseNewick = (newick) => {
   return tree;
 };
 
-export default parseNewick;
+/** @param {NewickNode} node */
+export const unparseNewick = (node, isRoot = -1) => {
+  let newick = '';
+
+  if (node.children?.length) newick += `(${node.children.map(unparseNewick).join(',')})`;
+  if (node.name) newick += node.name;
+  if (node.length) newick += `:${node.length}`;
+  if (isRoot < 0) newick += `;`;
+
+  return newick;
+};
+
+// TODO: make sure the outputted json is compatible with similar libraries:
+// - https://github.com/octav47/NewickJS (typescript)
+// - https://github.com/daviddao/biojs-io-newick (javascript)
+// - https://pypi.org/project/newick/ (python)
+// - https://github.com/iosonofabio/newick_to_json (python)
+// - https://pypi.org/project/newick-visualizer/1.0.2/ (python)
+// - NexSON (https://github.com/OpenTreeOfLife/phylesystem-api/wiki/HoneyBadgerFish)
+// - https://gist.github.com/Ad115/34dfc6560b64779a40c1a929f560511b (python)

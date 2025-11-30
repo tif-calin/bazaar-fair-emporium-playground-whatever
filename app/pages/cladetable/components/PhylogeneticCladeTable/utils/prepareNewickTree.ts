@@ -1,4 +1,4 @@
-import type { NewickNode } from "~/pages/cladetable/utils/parseNewick";
+import { parseNewick, unparseNewick, type NewickNode } from '~/pages/cladetable/utils/newick';
 
 const RE_OTT_NODE_NAME = /^(?<genus>[A-Za-z-]+)_(?<speciesEpitaph>[A-Za-z-]+)_ott(?<ottId>\d+)$/;
 
@@ -25,10 +25,17 @@ const prepareNewickTree = (node: NewickNode) => {
     }
   }
 
-  if (node.children) node.children = node.children.filter((child) => prepareNewickTree(child));
+  if (node.children) node.children = node.children.filter(child => prepareNewickTree(child));
   if (node.children?.length) treeDoesContainDesiredLeaf = true;
 
   return treeDoesContainDesiredLeaf;
+};
+
+export const prepareFromString = (newick: string) => {
+  const rootNode = parseNewick(newick);
+  prepareNewickTree(rootNode);
+
+  return unparseNewick(rootNode);
 };
 
 export default prepareNewickTree;
