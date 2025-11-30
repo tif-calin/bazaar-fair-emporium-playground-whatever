@@ -1,9 +1,11 @@
-import parseNewick from '~/pages/cladetable/utils/parseNewick';
+import { parseNewick } from '~/pages/cladetable/utils/newick';
 import { getPopularityList } from './onezoom';
 import { getInducedSubtree, getLineage, getResolvedName } from './opentree';
 import { getWikiData } from './wikidata';
 import prepareNewickTree from '../../PhylogeneticCladeTable/utils/prepareNewickTree';
 import parseTreeForCladeTable from '../../CladeTable/utils/parseTreeForCladeTable';
+import { sum } from '~/utils/numbers';
+import { unparseCsv } from '../../PhylogeneticCladeTable/utils/csv';
 
 const constructRelatednessRanking = async (parentOttId: string, locusOttId: string) => {
   const newickTree = await getLineage(`ott${parentOttId}`, { format: 'newick' });
@@ -91,8 +93,12 @@ export const orchestrateInducedTree = async (latinName: string, opts: Partial<Op
   const popularityList = await getPopularityList(ottIds, { key: opts.oneZoomApiKey, max: 3270 });
   if (!popularityList) throw new Error('No popularity list found');
 
-  const popularityValues = popularityList.data.map(node => node[3] || 0);
-  const medianPopularity = popularityValues[Math.floor(popularityValues.length / 2)];
+  const popularityValues = popularityList.data
+    .map(node => node[3] || 0)
+    .toSorted((a, b) => Number(a) - Number(b));
+  const percentile85 = popularityValues[Math.floor(popularityValues.length * 0.85)];
+  const averagePopularity = sum(popularityValues) / popularityValues.length;
+  const popularityThreshold = (percentile85 + averagePopularity) / 2;
   const popularKids: Record<string, number> = {};
   for (const node of relatednessList) {
     const currOttId = node.data?.ottId?.toString();
@@ -101,21 +107,32 @@ export const orchestrateInducedTree = async (latinName: string, opts: Partial<Op
 
     if (`${currOttId}` === ottid) popularKids[currOttId] = popularity || 0;
     if (Object.keys(popularKids).length >= opts.finalLeafCount || !popularity) continue;
-    if (popularity > medianPopularity) popularKids[currOttId] = popularity;
+    if (popularity > popularityThreshold) popularKids[currOttId] = popularity;
   }
 
   const inducedNewick = await getInducedSubtree([ottid, ...Object.keys(popularKids)]);
   if (!inducedNewick || !('newick' in inducedNewick)) throw new Error('No induced newick found');
+
+  const csv = unparseCsv([
+    ['id', 'ottId', 'popularity'],
+    ...Object.entries(popularKids).map(row => {
+      const nodeId = relatednessList.find(node => node.data?.ottId === row[0])?.id;
+      if (!nodeId) throw new Error('No node ID found');
+
+      return [`${nodeId}`, ...row] as string[];
+    }),
+  ]);
 
   console.log('orchestrateInducedTree', {
     wikidataIds,
     opentreeData,
     parent,
     popularityList,
-    medianPopularity,
+    popularityThreshold,
     popularKids,
     inducedNewick,
+    csv,
   });
 
-  return inducedNewick;
+  return { ...inducedNewick, csv };
 };

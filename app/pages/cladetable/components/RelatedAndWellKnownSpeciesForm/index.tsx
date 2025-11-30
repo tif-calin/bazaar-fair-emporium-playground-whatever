@@ -4,25 +4,37 @@ import Button from '../Button';
 import { styled } from '@linaria/react';
 import useLocalStorage from '~/utils/useLocalStorage';
 import { orchestrateInducedTree } from './utils/orchestrateInducedTree';
+import { useSearchParams } from 'react-router';
 
 const FormContainer = styled.form`
   display: flex;
-  gap: 0.5rem;
+   flex-wrap: wrap;
+   gap: 0 0.5rem;
+
+  & > .message {
+    font-size: 0.75rem;
+    width: 100%;
+    text-align: right;
+  }
 `;
 
 const RelatedAndWellKnownSpeciesForm = ({
-  setNewickTree,
+  setCsv,
+  setNewick,
 }: {
-  setNewickTree: React.Dispatch<React.SetStateAction<string>>;
+  setCsv: React.Dispatch<React.SetStateAction<string>>;
+  setNewick: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const formId = React.useId();
 
   const [isLoading, setIsLoading] = React.useState(false);
+  // const [actionMessage, setActionMessage] = React.useState('');
   const [oneZoomApiKey] = useLocalStorage('oneZoomApiKey', '');
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [savedLatinName, setSavedLatinName] = useLocalStorage('savedLatinName', '');
   const [inputtedLatinName, setInputtedLatinName] = React.useState(savedLatinName);
-  // TODO: get species from url query param
+  const urlLatinName = searchParams.get('latinName');
 
   const handleOnChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setInputtedLatinName(e.target.value),
@@ -37,20 +49,22 @@ const RelatedAndWellKnownSpeciesForm = ({
 
       setIsLoading(true);
       setSavedLatinName(latinName || '');
-      const { newick } = await orchestrateInducedTree(savedLatinName, {
+      setSearchParams({ ...searchParams, latinName });
+      const { newick, csv } = await orchestrateInducedTree(latinName, {
         oneZoomApiKey,
-        oneZoomMaxQuery: oneZoomApiKey === '0' ? 100 : 3270,
+        oneZoomMaxQuery: oneZoomApiKey === '0' ? 100 : 3_270,
       });
-      setNewickTree(newick);
+      setNewick(newick);
+      setCsv(csv);
       setIsLoading(false);
     },
-    [oneZoomApiKey, savedLatinName, setNewickTree, setSavedLatinName]
+    [oneZoomApiKey, searchParams, setCsv, setNewick, setSavedLatinName, setSearchParams]
   );
 
   return (
     <FormContainer id={formId} action={handleFormAction}>
       <Input
-        defaultValue={savedLatinName}
+        defaultValue={urlLatinName || savedLatinName}
         kind="text"
         label="Latin name"
         name="latinName"
@@ -58,6 +72,7 @@ const RelatedAndWellKnownSpeciesForm = ({
         type="text"
       />
       <Button disabled={isLoading || !inputtedLatinName.length}>Go</Button>
+      {/* {actionMessage && <span className="message">{actionMessage}</span>} */}
     </FormContainer>
   );
 };
