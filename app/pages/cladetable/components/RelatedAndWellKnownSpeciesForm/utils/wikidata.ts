@@ -103,6 +103,7 @@ const PROPERTIES = [
   // TODO: Biodiversity Heritage Library https://www.biodiversitylibrary.org/name/Cinnyris_osea
   // TODO: OneZoom https://www.onezoom.org/life/@={{ID}}
   // TODO: Dave's Garden Plant Files https://davesgarden.com/guides/pf/go/{{ID}}
+  // TODO: KNApSAcK https://www.knapsackfamily.com/knapsack_core/result.php?sname=organism&word={{SPECIES}}
 ] as const;
 
 type WBSearchEntitiesResult = {

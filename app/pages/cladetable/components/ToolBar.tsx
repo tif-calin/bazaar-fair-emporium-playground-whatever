@@ -46,12 +46,15 @@ const ToolBar = () => {
     [setOneZoomApiKey]
   );
 
-  const handleClick = React.useCallback<React.MouseEventHandler<HTMLButtonElement>>(event => {
-    event.preventDefault();
-    event.stopPropagation();
-    const dialog = document.querySelector<HTMLDialogElement>(`#${dialogId}`);
-    dialog?.showModal();
-  }, [dialogId]);
+  const handleClick = React.useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const dialog = document.querySelector<HTMLDialogElement>(`#${dialogId}`);
+      dialog?.showModal();
+    },
+    [dialogId]
+  );
 
   return (
     <Container>
@@ -75,7 +78,7 @@ const ToolBar = () => {
         </div>
       </dialog>
     </Container>
-  )
+  );
 };
 
 export default React.memo(ToolBar);

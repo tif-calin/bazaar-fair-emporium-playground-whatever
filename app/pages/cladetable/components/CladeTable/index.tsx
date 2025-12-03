@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React, { type ReactNode } from 'react';
 import { styled } from '@linaria/react';
 import type { CladeTableData } from './types';
 import { mapObject } from '~/utils/object';
@@ -7,8 +7,8 @@ import useResizeObserver from '~/utils/useResizeObserver';
 import { sum } from '~/utils/numbers';
 import { groupByKey } from '~/utils/collections';
 
-interface Props {
-  data: CladeTableData;
+interface Props<T extends Record<string, ReactNode> = Record<string, ReactNode>> {
+  data: CladeTableData<T>;
   id: string;
   title: string;
 }
@@ -63,9 +63,11 @@ const VizContainer = styled.div<{
 
 const CLADE_NODE_DISTANCE = 7;
 
-const CladeTable = (props: Props) => {
+const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNode>>(
+  props: Props<T>
+) => {
   const { data } = props;
-  const id = useId();
+  const svgId = React.useId();
 
   const [leafNodeRowHeights, setLeafNodeRowHeights] = React.useState<number[]>([]);
 
@@ -125,7 +127,7 @@ const CladeTable = (props: Props) => {
   const leafNodes = Object.values(parsedNodes).filter(node => node.depth === 1);
 
   return (
-    <VizContainer cladogramWidth={vizWidth}>
+    <VizContainer cladogramWidth={vizWidth} id={props.id}>
       <table>
         {/* TODO: <caption>{props.title}</caption> */}
         <thead>
@@ -141,7 +143,7 @@ const CladeTable = (props: Props) => {
             <td rowSpan={leafCount}>
               <svg
                 className="cladogram"
-                id={id}
+                id={svgId}
                 width={vizWidth}
                 viewBox={`0 0 ${vizWidth} ${vizHeight}`}
               >
@@ -173,4 +175,4 @@ const CladeTable = (props: Props) => {
   );
 };
 
-export default React.memo(CladeTable);
+export default React.memo(CladeTable) as typeof CladeTable;
