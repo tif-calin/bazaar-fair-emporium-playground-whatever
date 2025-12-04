@@ -62,16 +62,16 @@ const InputStyled = styled.div<{ gridSpan: number }>`
     &:not(:placeholder-shown) + .label {
       background: var(--clr-bg);
       font-size: 0.8em;
-      left: 0.25rem;
-      padding: 0 0.25rem;
-      top: -0.75rem;
+      left: 4px;
+      padding: 0 4px;
+      top: -12px;
     }
     &:valid:not(:placeholder-shown) + .label { color: var(--clr-label); }
     &:invalid + .label { color: var(--clr-error); }
   }
 
   &:has(> :where(input, select)) {
-    height: 1.6rem;
+    height: calc(var(--msr-input-height) - 2px);
   }
 
   & > :where(textarea) {

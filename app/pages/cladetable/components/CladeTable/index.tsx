@@ -13,22 +13,23 @@ interface Props<T extends Record<string, ReactNode> = Record<string, ReactNode>>
   title: string;
 }
 
-const VizContainer = styled.div<{
+const Container = styled.div<{
   cladogramWidth: number;
 }>`
-  display: flex;
-  overflow: auto;
+  padding: 2px 0;
 
-  & td:has(> svg.cladogram) {
-    border-right: 1px dashed var(--clr-line);
-    min-width: ${props => props.cladogramWidth}px;
-  }
+  & :where(& > table) {
+    line-height: 1;
+    white-space: nowrap;
 
-  & > table {
     & td {
       padding: 0 0.25rem;
       vertical-align: middle;
-      line-height: 1;
+    }
+
+    & td:has(> svg.cladogram) {
+      border-right: 1px dashed var(--clr-line);
+      min-width: ${props => props.cladogramWidth}px;
     }
 
     & thead td:not(:empty) {
@@ -36,18 +37,11 @@ const VizContainer = styled.div<{
       border: 1px solid var(--clr-line);
       font-weight: 500;
       text-align: center;
-      white-space: nowrap;
     }
 
     & tbody {
       & td {
         border-right: 1px dashed var(--clr-line);
-      }
-
-      & td > * {
-        align-items: center;
-        display: flex;
-        min-height: 1.5rem;
       }
 
       & tr {
@@ -67,6 +61,9 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
   props: Props<T>
 ) => {
   const { data } = props;
+  const opts = {
+    defaultRowHeight: 20,
+  };
   const svgId = React.useId();
 
   const [leafNodeRowHeights, setLeafNodeRowHeights] = React.useState<number[]>([]);
@@ -74,7 +71,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
   const treeDepth = Math.max(...Object.values(data.nodes).map(node => node.depth));
   const vizWidth = (treeDepth + 0.5) * CLADE_NODE_DISTANCE;
   const leafCount = Math.max(...Object.values(data.nodes).map(node => node.leafCount));
-  const vizHeight = sum(leafNodeRowHeights) || leafCount * 30;
+  const vizHeight = sum(leafNodeRowHeights) || leafCount * opts.defaultRowHeight;
 
   const { parsedNodes, parsedEdges } = React.useMemo(() => {
     const edgesBySource = groupByKey(Object.values(data.edges), 'source');
@@ -83,7 +80,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
       nodeYLevels[node.depth] ||= 0;
       nodeYLevels[node.depth]++;
 
-      let y = (nodeYLevels[node.depth] - 0.5) * 30;
+      let y = (nodeYLevels[node.depth] - 0.5) * opts.defaultRowHeight;
       if (node.leafCount === 1) {
         const currRowHeight = leafNodeRowHeights[nodeYLevels[node.depth] - 1];
         const cumulativeRowHeight = sum(leafNodeRowHeights.slice(0, nodeYLevels[node.depth]));
@@ -111,7 +108,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
       });
 
     return { parsedNodes, parsedEdges: data.edges };
-  }, [data.edges, data.nodes, treeDepth, leafNodeRowHeights]);
+  }, [data.edges, data.nodes, opts.defaultRowHeight, treeDepth, leafNodeRowHeights]);
 
   const handleTbodyResize = React.useCallback<ResizeObserverCallback>(entries => {
     if (!entries?.length) return;
@@ -127,8 +124,8 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
   const leafNodes = Object.values(parsedNodes).filter(node => node.depth === 1);
 
   return (
-    <VizContainer cladogramWidth={vizWidth} id={props.id}>
-      <table>
+    <Container cladogramWidth={vizWidth} id={props.id}>
+      <table contentEditable>
         {/* TODO: <caption>{props.title}</caption> */}
         <thead>
           <tr>
@@ -171,7 +168,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
           ))}
         </tbody>
       </table>
-    </VizContainer>
+    </Container>
   );
 };
 

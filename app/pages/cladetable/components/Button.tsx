@@ -1,20 +1,30 @@
 import { styled } from '@linaria/react';
 
 const StyledButton = styled.button`
-  --clr-bg: #38d9a9;
+  --clr-btn-bg: #38d9a9;
   --clr-border: var(--clr-line);
-  --clr-txt: var(--color-offblack);
+  --clr-btn-txt: var(--color-offblack);
 
-  background-color: var(--clr-bg);
+  &.secondary {
+    --clr-btn-bg: var(--clr-btn-bg);
+    --clr-btn-txt: var(--clr-txt);
+
+    &:hover:not(:disabled) {
+      background-color: var(--clr-btn-txt);
+      color: var(--clr-bg);
+    }
+  }
+
+  background-color: var(--clr-btn-bg);
   border: 1px solid var(--clr-border);
    border-radius: var(--msr-radius);
-  color: var(--clr-txt);
+  color: var(--clr-btn-txt);
   font-weight: 500;
-  height: 1.6rem;
+  height: calc(var(--msr-input-height) - 2px);
   padding: 0 0.5rem;
 
   &:hover:not(:disabled) {
-    background-color: var(--clr-bg-hover);
+    background-color: unset;
     color: unset;
   }
 
@@ -32,13 +42,14 @@ const StyledButton = styled.button`
 type Props = {
   children: React.ReactNode;
   className?: string;
+  kind?: 'primary' | 'secondary';
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = (props: Props) => {
-  const { className, children, ...buttonAttrs } = props;
+  const { className, children, kind = 'primary', ...buttonAttrs } = props;
 
   return (
-    <StyledButton className={className} {...buttonAttrs}>
+    <StyledButton className={`${kind} ${className}`} {...buttonAttrs}>
       {children}
     </StyledButton>
   );

@@ -9,6 +9,20 @@ My goal here is to create a reusable component that renders such visualizations.
 
 ## LOG
 
+### 2025-12-02
+I've added logic for trimming nodes that are single parents. Recursive solutions always end up being more elegant than I fear. I've also did a fair bit of refactoring of the type system to improve type safety. Still some work to do on that end. Oh and I've added a download button that uses `html-to-image` to generate a PNG. Hopefully that should make it easier to share visualizations.
+
+Okay I've got to start eyeballing an MVP so I can move on from this project.
+
+#### MVP Goals
+- [ ] editable table
+- [ ] fix the type system of nodes
+- [ ] adding cacheing solution to minimize potential for spamming APIs
+
+#### MVP Non-Goals
+- [ ] drop-down to download visual in different formats (svg, jpeg, etc)
+- [ ] color edges based on the order of the species
+
 ### 2025-11-30
 
 #### useSyncExternalStore
