@@ -1,6 +1,21 @@
 import { parseNewick, unparseNewick, type NewickNode } from '~/pages/cladetable/utils/newick';
 
-const RE_OTT_NODE_NAME = /^(?<genus>[A-Za-z-]+)_(?<speciesEpitaph>[A-Za-z-]+)_ott(?<ottId>\d+)$/;
+const RE_OTT_NODE_NAME = /^((?<genus>[A-Za-z-]+)_(?<speciesEpitaph>[A-Za-z-]+)_ott)?(?<ottId>\d+)$/;
+
+/**
+ * Trim out any nodes that have a single child.
+ */
+export const trimUnnecessaryParents = (node: NewickNode) => {
+  if (!node.children?.length) return node;
+
+  node.children = node.children.map(child => {
+    trimUnnecessaryParents(child);
+    if (child.children?.length === 1) return child.children?.[0];
+    else return child;
+  });
+
+  return node;
+};
 
 /**
  * Takes the ouput of `parseNewick` and prepares it for the `PhylogeneticCladeTable` component by:
@@ -31,11 +46,12 @@ const prepareNewickTree = (node: NewickNode) => {
   return treeDoesContainDesiredLeaf;
 };
 
+export default prepareNewickTree;
+
 export const prepareFromString = (newick: string) => {
   const rootNode = parseNewick(newick);
   prepareNewickTree(rootNode);
+  trimUnnecessaryParents(rootNode);
 
   return unparseNewick(rootNode);
 };
-
-export default prepareNewickTree;

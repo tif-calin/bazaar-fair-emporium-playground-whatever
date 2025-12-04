@@ -5,11 +5,6 @@ import { httpRequest } from '~/utils/http';
  */
 const BASE_URL = 'https://api.opentreeoflife.org/v3';
 
-type GetLineageOpts = {
-  /** @default "arguson" */
-  format: 'arguson' | 'newick';
-};
-
 type ArgSon = {
   extinct: boolean;
   lineage: Array<Omit<ArgSon, 'lineage'>>;
@@ -20,6 +15,10 @@ type ArgSon = {
 
 type SubtreeResponse = { synth_id: string; newick: string } | { synth_id: string; arguson: ArgSon };
 
+type GetLineageOpts = {
+  /** @default "arguson" */
+  format: 'arguson' | 'newick';
+};
 export const getLineage = async (ottId: string, opts?: Partial<GetLineageOpts>) => {
   const { format = 'arguson' } = opts || {};
 
@@ -38,15 +37,24 @@ export const getLineage = async (ottId: string, opts?: Partial<GetLineageOpts>) 
   });
 };
 
+type GetInducedSubtreeOpts = {
+  label_format: 'name_and_id' | 'id' | 'name';
+};
 /**
  * @link https://github.com/OpenTreeOfLife/germinator/wiki/Synthetic-tree-API-v3#induced_subtree
  */
-export const getInducedSubtree = async (ottIds: string[]) => {
+export const getInducedSubtree = async (
+  ottIds: string[],
+  opts?: Partial<GetInducedSubtreeOpts>
+) => {
+  const { label_format = 'name_and_id' } = opts || {};
+
   return await httpRequest<{ newick: string }>({
     url: `${BASE_URL}/tree_of_life/induced_subtree`,
     init: {
       method: 'POST',
       body: JSON.stringify({
+        label_format,
         ott_ids: ottIds,
         synth_id: undefined,
       }),

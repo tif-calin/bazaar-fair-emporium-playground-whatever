@@ -7,7 +7,7 @@
  * ```
  */
 export const chunk = <T>(arr: T[], size: number) => {
-  if (!Number.isSafeInteger(size)) throw new Error("size must be a safe integer");
+  if (!Number.isSafeInteger(size)) throw new Error('size must be a safe integer');
 
   return arr.reduce<T[][]>((acc, curr, index) => {
     const chunkIndex = Math.floor(index / size);
@@ -17,6 +17,20 @@ export const chunk = <T>(arr: T[], size: number) => {
     return acc;
   }, []);
 };
+
+export const keyByFunction = <NewKey extends string, Obj>(
+  items: Obj[],
+  keyGetter: (obj: Obj, i: number) => NewKey
+) =>
+  items.reduce(
+    (acc, item, index) => {
+      const keyName = keyGetter(item, index);
+
+      acc[keyName] = item;
+      return acc;
+    },
+    {} as Record<NewKey, Obj>
+  );
 
 /**
  * Returns hash with property values for keys, grouped items as values
@@ -40,12 +54,15 @@ export const groupByKey = <Obj extends { [key in Key]: PropertyKey }, Key extend
   items: Obj[],
   key: Key
 ) =>
-  items.reduce((acc, item) => {
-    const typename = item[key];
-    acc[typename] ||= [];
-    acc[typename].push(item);
-    return acc;
-  }, {} as Record<Obj[Key], Obj[]>);
+  items.reduce(
+    (acc, item) => {
+      const typename = item[key];
+      acc[typename] ||= [];
+      acc[typename].push(item);
+      return acc;
+    },
+    {} as Record<Obj[Key], Obj[]>
+  );
 
 /**
  * @example

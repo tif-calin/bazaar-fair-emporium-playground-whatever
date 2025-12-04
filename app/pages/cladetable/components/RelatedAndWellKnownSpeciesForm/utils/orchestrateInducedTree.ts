@@ -3,9 +3,9 @@ import { getPopularityList } from './onezoom';
 import { getInducedSubtree, getLineage, getResolvedName } from './opentree';
 import { getWikiData } from './wikidata';
 import prepareNewickTree from '../../PhylogeneticCladeTable/utils/prepareNewickTree';
-import parseTreeForCladeTable from '../../CladeTable/utils/parseTreeForCladeTable';
+import parseNewickNodeForCladeTable from '../../CladeTable/utils/parseNewickNodeForCladeTable';
 import { sum } from '~/utils/numbers';
-import { unparseCsv } from '../../PhylogeneticCladeTable/utils/csv';
+import { unparseCsv } from '~/pages/cladetable/utils/csv';
 
 const constructRelatednessRanking = async (parentOttId: string, locusOttId: string) => {
   const newickTree = await getLineage(`ott${parentOttId}`, { format: 'newick' });
@@ -14,15 +14,15 @@ const constructRelatednessRanking = async (parentOttId: string, locusOttId: stri
   const newickTreeJson = parseNewick(newickTree.newick);
   prepareNewickTree(newickTreeJson);
 
-  const [_, { nodes }] = parseTreeForCladeTable(newickTreeJson);
+  const [_, { nodes }] = parseNewickNodeForCladeTable(newickTreeJson);
   const locusNode = Object.values(nodes).find(node => node.data?.ottId === locusOttId);
   if (!locusNode) throw new Error('No locus node found');
-  const locusLineage = (locusNode.data?.lineage as string[]).toReversed();
+  const locusLineage = (locusNode.lineage as string[]).toReversed();
   const relatednessList = Object.values(nodes)
     .toSorted((a, b) => a.depth - b.depth)
     .filter(node => node.depth === 1)
     .map(node => {
-      const currLineage = new Set(node.data?.lineage as string[]);
+      const currLineage = new Set(node.lineage as string[]);
       const distanceFromLocus = locusLineage.findIndex(ancestor => currLineage.has(ancestor));
 
       return { ...node, distanceFromLocus };

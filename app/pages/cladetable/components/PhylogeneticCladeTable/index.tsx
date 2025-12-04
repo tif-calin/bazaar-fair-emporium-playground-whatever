@@ -1,14 +1,19 @@
 import React from 'react';
 import { parseNewick } from '../../utils/newick';
 import CladeTable from '../CladeTable';
-import parseTreeForCladeTable from '../CladeTable/utils/parseTreeForCladeTable';
 import { styled } from '@linaria/react';
-import prepareNewickTree, { prepareFromString } from './utils/prepareNewickTree';
+import prepareNewickTree, {
+  prepareFromString,
+  trimUnnecessaryParents,
+} from './utils/prepareNewickTree';
 import type { CladeTableData } from '../CladeTable/types';
 import Input from '../Input';
 import RelatedAndWellKnownSpeciesForm from '../RelatedAndWellKnownSpeciesForm';
-import { parseCsv } from './utils/csv';
 import { groupByFunction } from '~/utils/collections';
+import parseNewickNodeForCladeTable from '../CladeTable/utils/parseNewickNodeForCladeTable';
+import type { PhylogeneticNodeData } from './types';
+import { parseCsv } from '../../utils/csv';
+import ActionArea from '../CladeTable/components/ActionArea';
 
 const DEFAULT_NEWICK = prepareFromString(
   // eslint-disable-next-line max-len
@@ -33,11 +38,6 @@ const Hr = styled.hr`
   margin: 1rem 0;
 `;
 
-// type Props = {
-//   newick: string;
-//   csv: string;
-// };
-
 const LatinNameCell = styled.div`
   font-style: italic;
 `;
@@ -50,12 +50,13 @@ const PhylogeneticCladeTable = () => {
     setNewickTree(e.target.value);
   }, []);
 
-  const cladeTableData = React.useMemo<CladeTableData>(() => {
+  const cladeTableData = React.useMemo<CladeTableData<PhylogeneticNodeData>>(() => {
     const rootNode = parseNewick(newickTree);
     prepareNewickTree(rootNode);
-    const [_, cladeTableData] = parseTreeForCladeTable(rootNode);
+    trimUnnecessaryParents(rootNode);
+    const [_, cladeTableData] = parseNewickNodeForCladeTable(rootNode);
 
-    const { data: parsedCsv } = parseCsv(csv);
+    const parsedCsv = parseCsv(csv);
     const csvRowsById = groupByFunction(parsedCsv, row => row[1]);
 
     const newNodes = Object.values(cladeTableData.nodes).map(node => {
@@ -71,7 +72,7 @@ const PhylogeneticCladeTable = () => {
       return [node.id, { ...node, data: nodeData }];
     });
 
-    const columns: CladeTableData['columns'] = [
+    const columns: CladeTableData<PhylogeneticNodeData>['columns'] = [
       {
         key: 'latinName',
         label: 'Latin Name',
@@ -82,7 +83,13 @@ const PhylogeneticCladeTable = () => {
     if (csv) {
       columns.push({
         key: 'popularity',
-        label: 'Wikipedia Popularity',
+        label: (
+          <>
+            Wikipedia
+            <br />
+            Popularity
+          </>
+        ),
         onRender: node => (
           <div>
             <a href={`https://en.wikipedia.org/wiki/${node.data?.latinName}`}>
@@ -96,9 +103,12 @@ const PhylogeneticCladeTable = () => {
     return { columns, ...cladeTableData, nodes: Object.fromEntries(newNodes) };
   }, [csv, newickTree]);
 
+  const cladeTableId = React.useId();
+
   return (
     <>
-      <CladeTable title="example" id="example" data={cladeTableData} />
+      <CladeTable<PhylogeneticNodeData> title="example" id={cladeTableId} data={cladeTableData} />
+      <ActionArea cladeTableId={cladeTableId} />
       <Hr />
       <InputSection>
         <RelatedAndWellKnownSpeciesForm setNewick={setNewickTree} setCsv={setCsv} />

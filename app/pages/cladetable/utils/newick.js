@@ -3,11 +3,13 @@ const RE_NEWICK_TOKENS = /\s*(;|,|\(|\))\s*/;
 const RE_FINAL_SEMICOLON = /;$/;
 
 /**
+ * @template {Record<string, any>} [T=Record<string, any>]
+ *
  * @typedef {{
- *   children?: NewickNode[];
+ *   children?: NewickNode<T>[];
  *   name?: string;
  *   length?: number;
- *   data?: Record<string, any>;
+ *   data?: T;
  * }} NewickNode
  */
 

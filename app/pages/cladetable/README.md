@@ -9,6 +9,9 @@ My goal here is to create a reusable component that renders such visualizations.
 
 ## LOG
 
+### 2025-12-03
+Actually I've decided to put this project on hold a little bit. I created a new component called `FromNewickAndCsv` that... renders a diagram from just a newick string and a csv string. I added some default data that I think displays a great use-case for this tool. Something I can present and deploy but won't expose any APIs it calls to potential spam #just[localfirstsoftware](https://lofi.so/)problems.
+
 ### 2025-12-02
 I've added logic for trimming nodes that are single parents. Recursive solutions always end up being more elegant than I fear. I've also did a fair bit of refactoring of the type system to improve type safety. Still some work to do on that end. Oh and I've added a download button that uses `html-to-image` to generate a PNG. Hopefully that should make it easier to share visualizations.
 

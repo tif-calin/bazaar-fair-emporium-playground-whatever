@@ -1,16 +1,21 @@
 import type { ReactNode } from 'react';
 
-type DefaultNodeData = Record<string, ReactNode>;
-
-export type CladeTableNode<T extends DefaultNodeData = DefaultNodeData> = {
+export type CladeTableNode<T extends Record<string, ReactNode> = Record<string, ReactNode>> = {
+  /** Must be unique. */
   id: string;
+  /** Newick node labels are optional so they cannot serve as unique ids. */
   label?: string;
+  /** Arbitrary data depending on implementation. */
   data?: T;
 
-  /** TODO: move this to ParsedNode ~culi */
+  //== TODO: move theses to ParsedNode ~culi ==\\
+
+  /** How many generations from the root node. */
   depth: number;
-  /** TODO: move this to ParsedNode ~culi */
+  /** Number of leaf nodes in this node's subtree. */
   leafCount: number;
+  /** The node.id of every ancestor of this node. First element is the root node. */
+  lineage: string[];
 };
 
 export type CladeTableEdge = {
@@ -19,13 +24,13 @@ export type CladeTableEdge = {
   target: CladeTableNode['id'];
 };
 
-type CladeTableColumns<T extends DefaultNodeData> = {
+type CladeTableColumns<T extends Record<string, ReactNode>> = {
   key: keyof T & string;
-  label?: string;
+  label?: ReactNode;
   onRender?: (node: CladeTableNode<T>) => ReactNode;
 };
 
-export type CladeTableData<T extends DefaultNodeData> = {
+export type CladeTableData<T extends Record<string, ReactNode>> = {
   columns: CladeTableColumns<T>[];
   nodes: Record<string, CladeTableNode<T>>;
   edges: Record<string, CladeTableEdge>;
