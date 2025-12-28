@@ -4,7 +4,7 @@
   "version": "0.2.2",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && react-router build",
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
