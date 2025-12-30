@@ -30,7 +30,7 @@ type CladeTableColumns<T extends Record<string, ReactNode>> = {
   onRender?: (node: CladeTableNode<T>) => ReactNode;
 };
 
-export type CladeTableData<T extends Record<string, ReactNode>> = {
+export type CladeTableData<T extends Record<string, ReactNode> = Record<string, ReactNode>> = {
   columns: CladeTableColumns<T>[];
   nodes: Record<string, CladeTableNode<T>>;
   edges: Record<string, CladeTableEdge>;

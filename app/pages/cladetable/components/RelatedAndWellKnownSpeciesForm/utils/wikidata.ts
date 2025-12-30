@@ -94,6 +94,7 @@ const PROPERTIES = [
     title: 'Wikidata',
     desc: 'knowledge base',
   },
+
   // {
   //   propertyId: "PALDAT",
   //   url: "https://www.paldat.org/pub/{{SPECIES::SNAKE}}/{{ID}}",
@@ -104,6 +105,7 @@ const PROPERTIES = [
   // TODO: OneZoom https://www.onezoom.org/life/@={{ID}}
   // TODO: Dave's Garden Plant Files https://davesgarden.com/guides/pf/go/{{ID}}
   // TODO: KNApSAcK https://www.knapsackfamily.com/knapsack_core/result.php?sname=organism&word={{SPECIES}}
+  // TODO: GloBI https://www.globalbioticinteractions.org/browse/?sourceTaxon={{SPECIES}}
 ] as const;
 
 type WBSearchEntitiesResult = {

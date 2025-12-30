@@ -22,6 +22,7 @@ const StyledButton = styled.button`
   font-weight: 500;
   height: calc(var(--msr-input-height) - 2px);
   padding: 0 0.5rem;
+  white-space: nowrap;
 
   &:hover:not(:disabled) {
     background-color: unset;

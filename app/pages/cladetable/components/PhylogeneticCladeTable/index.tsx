@@ -80,6 +80,7 @@ const PhylogeneticCladeTable = () => {
       },
       { key: 'ottId', label: 'OTT ID' },
     ];
+
     if (csv) {
       columns.push({
         key: 'popularity',

@@ -23,7 +23,6 @@ const Container = styled.div<{
     white-space: nowrap;
 
     & td {
-      padding: 0 0.25rem;
       vertical-align: middle;
     }
 
@@ -125,7 +124,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
 
   return (
     <Container cladogramWidth={vizWidth} id={props.id}>
-      <table contentEditable>
+      <table>
         {/* TODO: <caption>{props.title}</caption> */}
         <thead>
           <tr>
