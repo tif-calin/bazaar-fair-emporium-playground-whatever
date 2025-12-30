@@ -4,8 +4,8 @@ import { parseNewick } from '../../../utils/newick';
 import parseNewickNodeForCladeTable from '../utils/parseNewickNodeForCladeTable';
 import { parseCsv } from '../../../utils/csv';
 import { keyByFunction } from '~/utils/collections';
-import ActionArea from './ActionArea';
 import { styled } from '@linaria/react';
+import type { CladeTableData } from '../types';
 
 const ScrollContainer = styled.div`
   display: flex;
@@ -15,22 +15,26 @@ const ScrollContainer = styled.div`
 
 type Props = {
   /**
+   * The expectation is that the first column is the identifier.
+   */
+  csv: string;
+  /**
    * Node labels are expected to serve as the identifier for the csv.
    */
   newick: string;
   /**
-   * The expectation is that the first column is the identifier.
+   * By default columns defined by the csv are rendered as simple strings. If you want them
+   * rendered in a more complex way, define them here.
    */
-  csv: string;
+  predefinedColumns?: CladeTableData['columns'];
+  vizId: string;
 };
 
 /**
  * This is meant to be an alternative API for the `CladeTable` component that builds a CladeTable
  * from just a newick string and a csv string.
  */
-const FromNewickAndCsv = ({ newick, csv }: Props) => {
-  const id = React.useId();
-
+const FromNewickAndCsv = ({ csv, newick, vizId, predefinedColumns }: Props) => {
   const data = React.useMemo(() => {
     if (!newick) return { columns: [], nodes: {}, edges: {} };
 
@@ -52,19 +56,25 @@ const FromNewickAndCsv = ({ newick, csv }: Props) => {
       });
     }
 
-    return {
-      columns: header.slice(1).map(header => ({ key: header, label: header })),
-      nodes,
-      edges,
-    };
-  }, [csv, newick]);
+    const predefinedColumnsLookup = keyByFunction(predefinedColumns || [], column => column.key);
+
+    const columns = header.slice(1).map(key => {
+      return {
+        key,
+        label: predefinedColumnsLookup[key]?.label || key,
+        onRender: predefinedColumnsLookup[key]?.onRender,
+      };
+    });
+
+    return { columns, nodes, edges };
+  }, [csv, newick, predefinedColumns]);
 
   const nodeCount = Object.keys(data?.nodes).length;
   if (!nodeCount) return <span key="empty">No data to render</span>;
   return (
-      <ScrollContainer>
+    <ScrollContainer>
       <CladeTable key={`${vizId}-${nodeCount}`} title="example" id={vizId} data={data} />
-      </ScrollContainer>
+    </ScrollContainer>
   );
 };
 
