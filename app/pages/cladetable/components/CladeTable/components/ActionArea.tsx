@@ -7,10 +7,21 @@ import * as htmlToImage from 'html-to-image';
 const Wrapper = styled.div`
   display: flex;
    align-items: center;
-   justify-content: flex-end;
+   flex-wrap: wrap;
+   gap: 1rem;
+
+  & > :last-child {
+    margin-left: auto;
+  }
 `;
 
-const ActionArea = ({ cladeTableId }: { cladeTableId: string }) => {
+const ActionArea = ({
+  cladeTableId,
+  children,
+}: {
+  cladeTableId: string;
+  children?: React.ReactNode;
+}) => {
   const handleClickDownload = React.useCallback(() => {
     const node = document.getElementById(cladeTableId);
     console.log(node);
@@ -20,6 +31,7 @@ const ActionArea = ({ cladeTableId }: { cladeTableId: string }) => {
 
   return (
     <Wrapper>
+      {children}
       <Button kind="secondary" onClick={handleClickDownload}>
         Download
       </Button>

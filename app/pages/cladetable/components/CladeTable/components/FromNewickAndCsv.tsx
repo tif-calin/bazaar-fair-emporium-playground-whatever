@@ -59,14 +59,12 @@ const FromNewickAndCsv = ({ newick, csv }: Props) => {
     };
   }, [csv, newick]);
 
-  if (!Object.keys(data?.nodes)?.length) return <span key="empty">No data to render</span>;
+  const nodeCount = Object.keys(data?.nodes).length;
+  if (!nodeCount) return <span key="empty">No data to render</span>;
   return (
-    <>
       <ScrollContainer>
-        <CladeTable key="viz" title="example" id={id} data={data} />
+      <CladeTable key={`${vizId}-${nodeCount}`} title="example" id={vizId} data={data} />
       </ScrollContainer>
-      <ActionArea cladeTableId={id} />
-    </>
   );
 };
 
