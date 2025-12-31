@@ -2,10 +2,7 @@ import React from 'react';
 import { parseNewick } from '../../utils/newick';
 import CladeTable from '../CladeTable';
 import { styled } from '@linaria/react';
-import prepareNewickTree, {
-  prepareFromString,
-  trimUnnecessaryParents,
-} from './utils/prepareNewickTree';
+import { prepareOtolNewickTree, trimUnnecessaryParents } from './utils/prepareNewickTree';
 import type { CladeTableData } from '../CladeTable/types';
 import Input from '../Input';
 import RelatedAndWellKnownSpeciesForm from '../RelatedAndWellKnownSpeciesForm';
@@ -15,10 +12,9 @@ import type { PhylogeneticNodeData } from './types';
 import { parseCsv } from '../../utils/csv';
 import ActionArea from '../CladeTable/components/ActionArea';
 
-const DEFAULT_NEWICK = prepareFromString(
+const DEFAULT_NEWICK =
   // eslint-disable-next-line max-len
-  "((((Solanum_galapagense_ott200836,((Solanum_cheesmaniae_ott242855,Solanum_pimpinellifolium_ott797186),(Solanum_lycopersicum_var._cerasiforme_ott640492)Solanum_lycopersicum_ott378964)),(Solanum_chmielewskii_ott360692,(Solanum_pennellii_var._puberulum_ott508882)Solanum_pennellii_ott1069768)),(Solanum_chilense_ott378983,('[Lycopersicon] peruvianum var. humifusum ott837938','[Lycopersicon] peruvianum var. dentatum ott856663')Solanum_peruvianum_ott378975)),((Lycopersicon_hirsutum_f._glabratum_ott807666)Solanum_habrochaites_ott885264,Solanum_neorickii_ott885270));"
-);
+  "((((Solanum_galapagense_ott200836,((Solanum_cheesmaniae_ott242855,Solanum_pimpinellifolium_ott797186),(Solanum_lycopersicum_var._cerasiforme_ott640492)Solanum_lycopersicum_ott378964)),(Solanum_chmielewskii_ott360692,(Solanum_pennellii_var._puberulum_ott508882)Solanum_pennellii_ott1069768)),(Solanum_chilense_ott378983,('[Lycopersicon] peruvianum var. humifusum ott837938','[Lycopersicon] peruvianum var. dentatum ott856663')Solanum_peruvianum_ott378975)),((Lycopersicon_hirsutum_f._glabratum_ott807666)Solanum_habrochaites_ott885264,Solanum_neorickii_ott885270));";
 
 const InputSection = styled.div`
   display: flex;
@@ -52,7 +48,7 @@ const PhylogeneticCladeTable = () => {
 
   const cladeTableData = React.useMemo<CladeTableData<PhylogeneticNodeData>>(() => {
     const rootNode = parseNewick(newickTree);
-    prepareNewickTree(rootNode);
+    prepareOtolNewickTree(rootNode);
     trimUnnecessaryParents(rootNode);
     const [_, cladeTableData] = parseNewickNodeForCladeTable(rootNode);
 

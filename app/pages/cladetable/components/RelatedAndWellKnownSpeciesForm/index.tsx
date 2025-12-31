@@ -43,7 +43,6 @@ const RelatedAndWellKnownSpeciesForm = ({
 
   const handleFormAction = React.useCallback(
     async (formData: FormData) => {
-      console.count('handleFormAction');
       const latinName = formData.get('latinName');
       if (typeof latinName !== 'string') return;
 

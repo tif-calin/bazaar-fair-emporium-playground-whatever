@@ -24,7 +24,6 @@ const ActionArea = ({
 }) => {
   const handleClickDownload = React.useCallback(() => {
     const node = document.getElementById(cladeTableId);
-    console.log(node);
     if (!node) return;
     htmlToImage.toPng(node).then(async dataUrl => download(dataUrl, 'clade-table.png'));
   }, [cladeTableId]);

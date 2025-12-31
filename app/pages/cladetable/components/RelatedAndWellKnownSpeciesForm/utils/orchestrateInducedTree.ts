@@ -2,7 +2,7 @@ import { parseNewick } from '~/pages/cladetable/utils/newick';
 import { getPopularityList } from './onezoom';
 import { getInducedSubtree, getLineage, getResolvedName } from './opentree';
 import { getWikiData } from './wikidata';
-import prepareNewickTree from '../../PhylogeneticCladeTable/utils/prepareNewickTree';
+import { prepareOtolNewickTree } from '../../PhylogeneticCladeTable/utils/prepareNewickTree';
 import parseNewickNodeForCladeTable from '../../CladeTable/utils/parseNewickNodeForCladeTable';
 import { sum } from '~/utils/numbers';
 import { unparseCsv } from '~/pages/cladetable/utils/csv';
@@ -12,7 +12,7 @@ const constructRelatednessRanking = async (parentOttId: string, locusOttId: stri
   if (!newickTree || !('newick' in newickTree)) throw new Error('No newick tree found');
 
   const newickTreeJson = parseNewick(newickTree.newick);
-  prepareNewickTree(newickTreeJson);
+  prepareOtolNewickTree(newickTreeJson);
 
   const [_, { nodes }] = parseNewickNodeForCladeTable(newickTreeJson);
   const locusNode = Object.values(nodes).find(node => node.data?.ottId === locusOttId);

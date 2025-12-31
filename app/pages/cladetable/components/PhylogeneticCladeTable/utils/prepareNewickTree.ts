@@ -26,7 +26,7 @@ export const trimUnnecessaryParents = (node: NewickNode) => {
  * > [!WARNING]
  * > This function works in-place and mutates the input.
  */
-const prepareNewickTree = (node: NewickNode) => {
+export const prepareOtolNewickTree = (node: NewickNode) => {
   let treeDoesContainDesiredLeaf = false;
 
   if (node.name) {
@@ -35,22 +35,21 @@ const prepareNewickTree = (node: NewickNode) => {
       treeDoesContainDesiredLeaf = true;
 
       const { genus, speciesEpitaph, ottId } = match.groups!;
-      const latinName = `${genus} ${speciesEpitaph}`;
+      const latinName = genus && speciesEpitaph ? `${genus} ${speciesEpitaph}` : undefined;
       node.data = { genus, latinName, ottId, speciesEpitaph, ...node.data };
     }
   }
+  // node.name = node.data?.latinName;
 
-  if (node.children) node.children = node.children.filter(child => prepareNewickTree(child));
+  if (node.children) node.children = node.children.filter(child => prepareOtolNewickTree(child));
   if (node.children?.length) treeDoesContainDesiredLeaf = true;
 
   return treeDoesContainDesiredLeaf;
 };
 
-export default prepareNewickTree;
-
 export const prepareFromString = (newick: string) => {
   const rootNode = parseNewick(newick);
-  prepareNewickTree(rootNode);
+  prepareOtolNewickTree(rootNode);
   trimUnnecessaryParents(rootNode);
 
   return unparseNewick(rootNode);
