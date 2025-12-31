@@ -16,6 +16,7 @@ interface Props<T extends Record<string, ReactNode> = Record<string, ReactNode>>
 const Container = styled.div<{
   cladogramWidth: number;
 }>`
+  background-color: var(--clr-fg);
   padding: 2px 0;
 
   & :where(& > table) {
@@ -61,6 +62,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
 ) => {
   const { data } = props;
   const opts = {
+    contentEditable: false,
     defaultRowHeight: 20,
   };
   const svgId = React.useId();
@@ -124,7 +126,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
 
   return (
     <Container cladogramWidth={vizWidth} id={props.id}>
-      <table>
+      <table contentEditable={opts.contentEditable}>
         {/* TODO: <caption>{props.title}</caption> */}
         <thead>
           <tr>
