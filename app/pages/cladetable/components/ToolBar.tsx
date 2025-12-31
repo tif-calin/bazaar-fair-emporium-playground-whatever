@@ -58,7 +58,9 @@ const ToolBar = () => {
 
   return (
     <Container>
-      <Button onClick={handleClick}>Settings</Button>
+      <Button kind="tertiary" onClick={handleClick}>
+        Settings
+      </Button>
       <dialog id={dialogId}>
         <div className="settings-panel">
           <form onSubmit={preventDefault}>

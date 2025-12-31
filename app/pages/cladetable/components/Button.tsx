@@ -15,12 +15,21 @@ const StyledButton = styled.button`
     }
   }
 
+  &.tertiary {
+    --clr-btn-bg: #ffa94d;
+    --clr-btn-txt: var(--clr-txt);
+  }
+
   background-color: var(--clr-btn-bg);
   border: 1px solid var(--clr-border);
    border-radius: var(--msr-radius);
   color: var(--clr-btn-txt);
+  display: flex;
+   align-items: center;
+   justify-content: center;
   font-weight: 500;
   height: calc(var(--msr-input-height) - 2px);
+  min-width: 5rem;
   padding: 0 0.5rem;
   white-space: nowrap;
 
@@ -43,7 +52,7 @@ const StyledButton = styled.button`
 type Props = {
   children: React.ReactNode;
   className?: string;
-  kind?: 'primary' | 'secondary';
+  kind?: 'primary' | 'secondary' | 'tertiary';
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = (props: Props) => {
