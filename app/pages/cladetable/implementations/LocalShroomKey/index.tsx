@@ -56,6 +56,11 @@ const LocalShroomKey = () => {
 
   return (
     <>
+      <p>
+        Input some coordinates below and to generate a key for mushrooms that grow nearby in this
+        time of year. This data is sourced from iNaturalist observations. The characteristics are
+        sourced from Wikipedia.
+      </p>
       <CoordinateActions onSubmit={handleSubmit} action={console.log}>
         <Input
           kind="number"
@@ -86,7 +91,7 @@ const LocalShroomKey = () => {
         predefinedColumns={predefinedColumns}
         vizId={vizId}
       />
-      <ActionArea cladeTableId={vizId} />
+      {!!newick && <ActionArea cladeTableId={vizId} />}
     </>
   );
 };

@@ -49,7 +49,7 @@ export const getNearbySpecies = async (args: {
         lng: args.longitude.toString(),
         locale: 'en-US',
         month: args.months?.join(',') || '',
-        per_page: '150',
+        per_page: '190',
         radius: args.radius.toString(),
         spam: 'false',
         taxon_id: `${args.taxon_id}`,

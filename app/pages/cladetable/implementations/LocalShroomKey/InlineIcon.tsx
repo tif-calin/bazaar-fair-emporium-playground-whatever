@@ -20,7 +20,7 @@ const InlineIcon = ({ altText, className, fallback, path, title }: Props) => {
 
   const handleNoImage = useCallback(() => setShouldFallback(true), []);
 
-  return shouldFallback ? (
+  return shouldFallback || !path ? (
     fallback
   ) : (
     <Wrapper className={className} title={title}>

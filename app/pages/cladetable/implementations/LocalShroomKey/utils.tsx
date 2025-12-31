@@ -36,7 +36,7 @@ const ottidsThatCauseErrors = new Set(['1044745', '459131', '466871']);
 export const generateMycomorphboxViz = async (latitude: number, longitude: number) => {
   // 0. Setup opts
   const opts = {
-    radius: 24,
+    radius: 20,
   };
 
   // 1. Load data
@@ -284,7 +284,8 @@ export const makePredefinedColumn = (
             <MorphologyCell key={`${node.id}-${key}`}>
               {values.map(tagVal => {
                 const tag: MorphologyTag = `${key}:${tagVal}`;
-                const pathToIcon = `/assets/mycoicons/${ICON_TO_TAG[tag]}.png`;
+                const fileName = ICON_TO_TAG[tag];
+                const pathToIcon = fileName ? `/assets/mycoicons/${fileName}.png` : '';
 
                 return (
                   <InlineIcon
