@@ -1,11 +1,11 @@
 import { parseNewick } from '~/pages/cladetable/utils/newick';
-import { getPopularityList } from './onezoom';
-import { getInducedSubtree, getLineage, getResolvedName } from './opentree';
-import { getWikiData } from './wikidata';
-import { prepareOtolNewickTree } from '../../PhylogeneticCladeTable/utils/prepareNewickTree';
-import parseNewickNodeForCladeTable from '../../CladeTable/utils/parseNewickNodeForCladeTable';
 import { sum } from '~/utils/numbers';
 import { unparseCsv } from '~/pages/cladetable/utils/csv';
+import { getInducedSubtree, getLineage, getResolvedName } from '../../utils/services/opentree';
+import { prepareOtolNewickTree } from '../PhylogeneticCladeTable/utils/prepareNewickTree';
+import parseNewickNodeForCladeTable from '../CladeTable/utils/parseNewickNodeForCladeTable';
+import { getWikiData } from '../../utils/services/wikidata';
+import { getPopularityList } from '../../utils/services/onezoom';
 
 const constructRelatednessRanking = async (parentOttId: string, locusOttId: string) => {
   const newickTree = await getLineage(`ott${parentOttId}`, { format: 'newick' });

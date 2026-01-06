@@ -3,7 +3,7 @@ import Input from '../Input';
 import Button from '../Button';
 import { styled } from '@linaria/react';
 import useLocalStorage from '~/utils/useLocalStorage';
-import { orchestrateInducedTree } from './utils/orchestrateInducedTree';
+import { orchestrateInducedTree } from './orchestrateInducedTree';
 import { useSearchParams } from 'react-router';
 
 const FormContainer = styled.form`
