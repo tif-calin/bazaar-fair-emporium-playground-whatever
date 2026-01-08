@@ -4,6 +4,8 @@ import InlineIcon from './InlineIcon';
 import { getNearbySpecies } from '../../components/RelatedAndWellKnownSpeciesForm/utils/inaturalist';
 import { unparseCsv } from '../../utils/csv';
 import { objectFromEntries } from '~/utils/object';
+import { getNearbySpecies } from '../../utils/services/inaturalist';
+import { getInducedSubtree } from '../../utils/services/opentree';
 
 export const prettyCoord = (coord: string | number) => Math.round(Number(coord) * 10_000) / 10_000;
 
