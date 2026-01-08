@@ -10,7 +10,6 @@ type Props = {
 };
 
 const Wrapper = styled.picture`
-  aspect-ratio: 1 / 1;
   display: inline-block;
   height: 1em;
 `;
