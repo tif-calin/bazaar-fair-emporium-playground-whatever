@@ -3,14 +3,14 @@ import type { CladeTableData } from '../../components/CladeTable/types';
 import InlineIcon from './InlineIcon';
 import { getNearbySpecies } from '../../components/RelatedAndWellKnownSpeciesForm/utils/inaturalist';
 import { unparseCsv } from '../../utils/csv';
-import { getInducedSubtree } from '../../components/RelatedAndWellKnownSpeciesForm/utils/opentree';
+import { objectFromEntries } from '~/utils/object';
 
 export const prettyCoord = (coord: string | number) => Math.round(Number(coord) * 10_000) / 10_000;
 
 // ------------------------------------ //
 // #region Generate Viz                 //
 
-const MORPHOLOGY_CATEGORIES = [
+export const MORPHOLOGY_CATEGORIES = [
   'hymeniumType',
   'capShape',
   'whichGills',
@@ -32,11 +32,12 @@ type MycomorphboxData = {
 let DATA: MycomorphboxData | undefined = undefined;
 
 // TODO: figure out an automated way to handle this (culi)
-const ottidsThatCauseErrors = new Set(['1044745', '459131', '466871']);
+const ottidsThatCauseErrors = new Set(['1044745', '212213', '459131', '466871', '687148']);
 export const generateMycomorphboxViz = async (latitude: number, longitude: number) => {
   // 0. Setup opts
   const opts = {
-    radius: 20,
+    radius: 12,
+    trimSingleParents: true,
   };
 
   // 1. Load data
@@ -71,7 +72,7 @@ export const generateMycomorphboxViz = async (latitude: number, longitude: numbe
     }))
     .map(({ mrph, ...s }) => ({
       ...s,
-      ...Object.fromEntries(
+      ...objectFromEntries(
         MORPHOLOGY_CATEGORIES.map(colKey => [
           colKey,
           mrph
@@ -82,6 +83,10 @@ export const generateMycomorphboxViz = async (latitude: number, longitude: numbe
         ])
       ),
     }));
+
+  const tallies = objectFromEntries(
+    MORPHOLOGY_CATEGORIES.map(key => [key, tally(csvData.map(row => row[key].split(', ')).flat())])
+  );
 
   const csv = unparseCsv([
     ['ottid', 'name', ...MORPHOLOGY_CATEGORIES],
@@ -214,18 +219,26 @@ const SporePrintCell = styled.div`
     ;
   }
 `;
-const MorphologyCell = styled.div`
+const MorphologyCell = styled.div<{
+  iconCount: number;
+}>`
   display: flex;
    align-items: center;
   font-size: 2rem;
+  min-width: ${p => (p.iconCount || 1) * 2}rem;
   height: 2rem;
   position: relative;
 `;
-
-// let positioning =
+const PositionedIcon = styled.span<{
+  positionIndex: number;
+}>`
+  position: ${p => (p.positionIndex ? 'absolute' : 'unset')};
+  left: ${p => (p.positionIndex ? `${p.positionIndex * 2}rem` : 'unset')};
+`;
 
 export const makePredefinedColumn = (
-  key: MorphologyCategory | 'name'
+  key: MorphologyCategory | 'name',
+  tallies?: Awaited<ReturnType<typeof generateMycomorphboxViz>>['tallies']
 ): CladeTableData['columns'][number] => {
   switch (key) {
     case 'name':
@@ -262,11 +275,7 @@ export const makePredefinedColumn = (
             .join(', ');
 
           return (
-            <SporePrintCell
-              style={{
-                background: `repeating-linear-gradient(45deg, ${gradient})`,
-              }}
-            >
+            <SporePrintCell style={{ background: `repeating-linear-gradient(45deg, ${gradient})` }}>
               <span>{colors.join(' or ')}</span>
             </SporePrintCell>
           );
@@ -280,21 +289,30 @@ export const makePredefinedColumn = (
         onRender: node => {
           if (typeof node.data?.[key] !== 'string') return null;
           const values = node.data?.[key].split(', ').toSorted();
+          const keyVals =
+            tallies?.[key] && key !== 'howEdible'
+              ? Object.keys(tallies?.[key]).filter(tag => !!tag && tag !== 'not-applicable')
+              : [];
           return (
-            <MorphologyCell key={`${node.id}-${key}`}>
-              {values.map(tagVal => {
+            <MorphologyCell key={`${node.id}-${key}`} iconCount={keyVals.length || values?.length}>
+              {values.map((tagVal, i) => {
                 const tag: MorphologyTag = `${key}:${tagVal}`;
                 const fileName = ICON_TO_TAG[tag];
                 const pathToIcon = fileName ? `/assets/mycoicons/${fileName}.png` : '';
 
+                let position = i;
+                if (keyVals.length) position = keyVals.indexOf(tagVal);
+                if (tagVal === 'not-applicable') position = i;
+
                 return (
+                  <PositionedIcon key={`${node.id}-${key}-${tagVal}`} positionIndex={position}>
                   <InlineIcon
-                    key={`${node.id}-${key}-${tagVal}`}
                     altText={`Mycomorphbox Icon for ${tag} ${key}`}
                     fallback={tagVal}
                     path={pathToIcon}
                     title={tagVal}
                   />
+                  </PositionedIcon>
                 );
               })}
             </MorphologyCell>

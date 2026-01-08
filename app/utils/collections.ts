@@ -1,3 +1,5 @@
+import { objectEntries } from './object';
+
 /**
  * Given an array, returns an array of arrays, each with a maximum length of `size`.
  *
@@ -73,3 +75,18 @@ export const groupByKey = <Obj extends { [key in Key]: PropertyKey }, Key extend
  */
 export const notEmpty = <TValue>(value: TValue | null | undefined): value is TValue =>
   value !== null && value !== undefined;
+
+export const tally = <T extends PropertyKey>(arr: T[]) => {
+  const counts = arr.reduce(
+    (acc, item) => {
+      acc[item] = (acc[item] || 0) + 1;
+      return acc;
+    },
+    {} as Record<T, number>
+  );
+
+  // sort tallies
+  return Object.fromEntries(
+    objectEntries(counts).toSorted(([, a], [, b]) => b - a)
+  ) as typeof counts;
+};

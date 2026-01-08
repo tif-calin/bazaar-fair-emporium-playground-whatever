@@ -5,7 +5,12 @@ import Button from '../../components/Button';
 import ActionArea from '../../components/CladeTable/components/ActionArea';
 import { styled } from '@linaria/react';
 import type { CladeTableData } from '../../components/CladeTable/types';
-import { generateMycomorphboxViz, makePredefinedColumn, prettyCoord } from './utils';
+import {
+  generateMycomorphboxViz,
+  makePredefinedColumn,
+  MORPHOLOGY_CATEGORIES,
+  prettyCoord,
+} from './utils';
 
 const CoordinateActions = styled.form`
   display: flex;
@@ -17,8 +22,10 @@ const CoordinateActions = styled.form`
 const LocalShroomKey = () => {
   const [csv, setCsv] = React.useState('');
   const [newick, setNewick] = React.useState('');
+  const [tallies, setTallies] =
+    React.useState<Awaited<ReturnType<typeof generateMycomorphboxViz>>['tallies']>();
 
-  const [latitude, setLatitude] = React.useState(19.4333);
+  const [latitude, setLatitude] = React.useState(defaultOfTheDay[0]);
   const [longitude, setLongitude] = React.useState(-99.1333);
 
   const handleFindMy = React.useCallback(() => {
@@ -32,25 +39,23 @@ const LocalShroomKey = () => {
   }, []);
 
   const handleSubmit = React.useCallback(async () => {
-    const newData = await generateMycomorphboxViz(latitude, longitude);
-    setCsv(newData.csv);
-    setNewick(newData.newick);
+    const { csv, newick, tallies } = await withInMemoryCache(
+      generateMycomorphboxViz,
+      latitude,
+      longitude
+    );
+
+    console.log(tallies);
+    setCsv(csv);
+    setNewick(newick);
+    setTallies(tallies);
   }, [latitude, longitude]);
 
   const predefinedColumns: CladeTableData['columns'] = React.useMemo(() => {
-    return (
-      [
-        'name',
-        'capShape',
-        'ecologicalType',
-        'howEdible',
-        'hymeniumType',
-        'stipeCharacter',
-        'whichGills',
-        'sporePrintColor',
-      ] as const
-    ).map(key => makePredefinedColumn(key));
-  }, []);
+    return (['name', ...MORPHOLOGY_CATEGORIES] as const).map(key =>
+      makePredefinedColumn(key, tallies)
+    );
+  }, [tallies]);
 
   const vizId = React.useId();
 
