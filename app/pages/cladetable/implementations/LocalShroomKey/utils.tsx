@@ -252,7 +252,10 @@ export const makePredefinedColumn = (
           const nameLatin = node.data?.name || '';
           return (
             <NameCell>
-              <a href={`https://en.wikipedia.org/wiki/${nameLatin}`} target="_blank">
+              <a
+                href={`https://en.wikipedia.org/wiki/${`${nameLatin}`.replaceAll(/\s/g, '_')}`}
+                target="_blank"
+              >
                 {nameLatin}
               </a>
             </NameCell>
