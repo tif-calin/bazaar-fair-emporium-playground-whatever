@@ -60,14 +60,15 @@ export const generateMycomorphboxViz = async (latitude: number, longitude: numbe
   // 3. Prepare data
   const speciesNearMe = new Set(inatData.results.map(sp => sp.taxon.name));
 
-  const csvData = Object.values(DATA.pages)
+  const csvData = Object.entries(DATA.pages)
     .filter(
-      p =>
+      ([k, p]) =>
         p.identifiers['Open Tree of Life'] &&
-        speciesNearMe.has(p.latinName) &&
+        // sometimes the accepted latin name is different from the page name
+        [k, p.latinName].some(s => speciesNearMe.has(s)) &&
         !ottidsThatCauseErrors.has(p.identifiers['Open Tree of Life'])
     )
-    .map(s => ({
+    .map(([_k, s]) => ({
       ottid: s.identifiers['Open Tree of Life'],
       name: s.latinName,
       mrph: s.morphologyTags,
