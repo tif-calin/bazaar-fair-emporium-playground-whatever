@@ -42,6 +42,21 @@ const Container = styled.div<{
     & tbody {
       & td {
         border-right: 1px dashed var(--clr-line);
+
+        &.cladogram-col,
+        &.name-col {
+          position: sticky;
+          filter:
+            drop-shadow(1px 1px var(--clr-bg))
+            drop-shadow(1px -1px var(--clr-bg))
+            drop-shadow(-1px -1px var(--clr-bg))
+            drop-shadow(-1px 1px var(--clr-bg))
+            drop-shadow(0 0 1px var(--clr-bg))
+          ;
+          z-index: 1;
+        }
+        &.cladogram-col { left: ${p => -p.cladogramWidth + 30}px; }
+        &.name-col { left: 30px; }
       }
 
       & tr {
@@ -139,7 +154,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
         </thead>
         <tbody ref={tbodyRef}>
           <tr>
-            <td rowSpan={leafCount}>
+            <td rowSpan={leafCount} className="cladogram-col">
               <svg
                 className="cladogram"
                 id={svgId}
@@ -149,8 +164,8 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
                 <Plot parsedNodes={parsedNodes} parsedEdges={parsedEdges} />
               </svg>
             </td>
-            {data.columns.map(col => (
-              <td key={col.key}>
+            {data.columns.map((col, colIndex) => (
+              <td key={col.key} className={colIndex ? '' : 'name-col'}>
                 {col.onRender ? (
                   col.onRender(leafNodes[0])
                 ) : (
@@ -161,8 +176,8 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
           </tr>
           {leafNodes.slice(1).map(node => (
             <tr key={node.id}>
-              {data.columns.map(col => (
-                <td key={col.key}>
+              {data.columns.map((col, colIndex) => (
+                <td key={col.key} className={colIndex ? '' : 'name-col'}>
                   {col.onRender ? col.onRender(node) : <div>{node.data?.[col.key]}</div>}
                 </td>
               ))}
