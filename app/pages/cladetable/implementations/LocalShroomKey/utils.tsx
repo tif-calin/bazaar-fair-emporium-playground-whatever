@@ -1,9 +1,11 @@
 import { styled } from '@linaria/react';
 import type { CladeTableData } from '../../components/CladeTable/types';
 import InlineIcon from './InlineIcon';
-import { getNearbySpecies } from '../../components/RelatedAndWellKnownSpeciesForm/utils/inaturalist';
 import { unparseCsv } from '../../utils/csv';
 import { objectFromEntries } from '~/utils/object';
+import { tally } from '~/utils/collections';
+import { parseNewick, unparseNewick } from '../../utils/newick';
+import { trimUnnecessaryParents } from '../../components/PhylogeneticCladeTable/utils/prepareNewickTree';
 import { getNearbySpecies } from '../../utils/services/inaturalist';
 import { getInducedSubtree } from '../../utils/services/opentree';
 
@@ -101,11 +103,17 @@ export const generateMycomorphboxViz = async (latitude: number, longitude: numbe
     { label_format: 'id' }
   );
   if (!inducedSubtree) throw new Error(`No subtree found for ${latitude}, ${longitude}`);
-  const newick = inducedSubtree.newick
+  let newick = inducedSubtree.newick
     .replaceAll(/\)(mrcaott\d+)?ott\d+/g, ')')
     .replaceAll(/ott/g, '');
 
-  return { csv, newick };
+  if (opts.trimSingleParents) {
+    const trimmedNewick = parseNewick(newick);
+    trimUnnecessaryParents(trimmedNewick);
+    newick = unparseNewick(trimmedNewick);
+  }
+
+  return { csv, newick, tallies };
 };
 
 // #endregion Generate Viz.             //
@@ -312,12 +320,12 @@ export const makePredefinedColumn = (
 
                 return (
                   <PositionedIcon key={`${node.id}-${key}-${tagVal}`} positionIndex={position}>
-                  <InlineIcon
-                    altText={`Mycomorphbox Icon for ${tag} ${key}`}
-                    fallback={tagVal}
-                    path={pathToIcon}
-                    title={tagVal}
-                  />
+                    <InlineIcon
+                      altText={`Mycomorphbox Icon for ${tag} ${key}`}
+                      fallback={tagVal}
+                      path={pathToIcon}
+                      title={tagVal}
+                    />
                   </PositionedIcon>
                 );
               })}
