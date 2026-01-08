@@ -20,6 +20,16 @@ const CoordinateActions = styled.form`
   margin: 1rem 0;
 `;
 
+const DEFAULT_CITIES = [
+  [19.4333, -99.1333], // Mexico City
+  [0.0, 0.0], // Null Island
+  [41.9658, -74.9061], // Agloe, NY
+  [53.543, -2.912], // Argleton Village
+  [42.0303, -87.9123], // 100 Gecs Tree
+  [42.3787, -71.3452], // Gerald
+] as Array<[number, number]>;
+const defaultOfTheDay = DEFAULT_CITIES[new Date().getDay() % DEFAULT_CITIES.length];
+
 const LocalShroomKey = () => {
   const [csv, setCsv] = React.useState('');
   const [newick, setNewick] = React.useState('');
@@ -27,7 +37,7 @@ const LocalShroomKey = () => {
     React.useState<Awaited<ReturnType<typeof generateMycomorphboxViz>>['tallies']>();
 
   const [latitude, setLatitude] = React.useState(defaultOfTheDay[0]);
-  const [longitude, setLongitude] = React.useState(-99.1333);
+  const [longitude, setLongitude] = React.useState(defaultOfTheDay[1]);
 
   const handleFindMy = React.useCallback(() => {
     if (!('geolocation' in navigator)) return console.warn('Geolocation is not supported');
