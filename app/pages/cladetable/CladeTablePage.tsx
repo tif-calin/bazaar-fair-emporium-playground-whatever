@@ -38,7 +38,7 @@ const Page = styled.div`
      border-bottom: 4px double var(--clr-line);
     padding: 1rem;
     width: 100%;
-     max-width: min(80ch, calc(100vw - 4rem));
+     max-width: min(90ch, calc(100vw - 4rem));
      min-width: 250px;
   }
 

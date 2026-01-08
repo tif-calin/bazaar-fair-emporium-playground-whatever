@@ -1,5 +1,5 @@
 import { styled } from '@linaria/react';
-import { useCallback, useState, type ReactNode } from 'react';
+import { memo, useCallback, useState, type ReactNode } from 'react';
 
 type Props = {
   altText: string;
@@ -29,4 +29,4 @@ const InlineIcon = ({ altText, className, fallback, path, title }: Props) => {
   );
 };
 
-export default InlineIcon;
+export default memo(InlineIcon);

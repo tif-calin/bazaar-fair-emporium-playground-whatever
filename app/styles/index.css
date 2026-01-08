@@ -20,12 +20,12 @@ body {
     text-align: center;
     width: 100%;
 
-    &:where(h1) { font-size: 2.5em; font-weight: 800; }
-    &:where(h2) { font-size: 2em; font-weight: 800; }
-    &:where(h3) { font-size: 1.75em; font-weight: 700; }
-    &:where(h4) { font-size: 1.5em; font-weight: 700; }
-    &:where(h5) { font-size: 1.25em; font-weight: 600; }
-    &:where(h6) { font-size: 1em; font-weight: 600; }
+    &:where(h1) { font-size: 2.5em; font-weight: 700; }
+    &:where(h2) { font-size: 2em; font-weight: 650; }
+    &:where(h3) { font-size: 1.75em; font-weight: 600; }
+    &:where(h4) { font-size: 1.5em; font-weight: 550; }
+    &:where(h5) { font-size: 1.25em; font-weight: 500; }
+    &:where(h6) { font-size: 1em; font-weight: 450; }
   }
 
   & a {

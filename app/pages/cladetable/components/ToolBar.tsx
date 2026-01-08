@@ -58,7 +58,7 @@ const ToolBar = () => {
 
   return (
     <Container>
-      <Button kind="tertiary" onClick={handleClick}>
+      <Button kind="secondary" onClick={handleClick}>
         Settings
       </Button>
       <dialog id={dialogId}>

@@ -124,6 +124,7 @@ const CladeTable = <T extends Record<string, ReactNode> = Record<string, ReactNo
 
   const leafNodes = Object.values(parsedNodes).filter(node => node.depth === 1);
 
+  if (leafNodes.length < 2) return 'No data to render.';
   return (
     <Container cladogramWidth={vizWidth} id={props.id}>
       <table contentEditable={opts.contentEditable}>

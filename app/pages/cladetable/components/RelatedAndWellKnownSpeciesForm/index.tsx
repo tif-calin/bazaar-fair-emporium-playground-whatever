@@ -10,6 +10,7 @@ const FormContainer = styled.form`
   display: flex;
    flex-wrap: wrap;
    gap: 0 0.5rem;
+  margin: 1rem 0;
 
   & > .message {
     font-size: 0.75rem;

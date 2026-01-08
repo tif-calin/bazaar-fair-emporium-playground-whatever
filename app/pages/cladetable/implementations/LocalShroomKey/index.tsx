@@ -17,6 +17,7 @@ const CoordinateActions = styled.form`
    align-items: center;
    flex-wrap: wrap;
    gap: 1rem;
+  margin: 1rem 0;
 `;
 
 const LocalShroomKey = () => {
