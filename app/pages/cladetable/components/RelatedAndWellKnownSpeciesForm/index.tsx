@@ -5,6 +5,7 @@ import { styled } from '@linaria/react';
 import useLocalStorage from '~/utils/useLocalStorage';
 import { orchestrateInducedTree } from './orchestrateInducedTree';
 import { useSearchParams } from 'react-router';
+import { withInMemoryCache } from '~/utils/cache';
 
 const FormContainer = styled.form`
   display: flex;
@@ -50,7 +51,7 @@ const RelatedAndWellKnownSpeciesForm = ({
       setIsLoading(true);
       setSavedLatinName(latinName || '');
       setSearchParams({ ...searchParams, latinName });
-      const { newick, csv } = await orchestrateInducedTree(latinName, {
+      const { newick, csv } = await withInMemoryCache(orchestrateInducedTree, latinName, {
         oneZoomApiKey,
         oneZoomMaxQuery: oneZoomApiKey === '0' ? 100 : 3_270,
       });

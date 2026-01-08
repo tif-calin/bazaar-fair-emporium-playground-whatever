@@ -11,6 +11,7 @@ import {
   MORPHOLOGY_CATEGORIES,
   prettyCoord,
 } from './utils';
+import { withInMemoryCache } from '~/utils/cache';
 
 const CoordinateActions = styled.form`
   display: flex;
@@ -21,12 +22,12 @@ const CoordinateActions = styled.form`
 `;
 
 const DEFAULT_CITIES = [
-  [19.4333, -99.1333], // Mexico City
   [0.0, 0.0], // Null Island
+  [19.4333, -99.1333], // Mexico City
   [41.9658, -74.9061], // Agloe, NY
-  [53.543, -2.912], // Argleton Village
   [42.0303, -87.9123], // 100 Gecs Tree
   [42.3787, -71.3452], // Gerald
+  [53.543, -2.912], // Argleton Village
 ] as Array<[number, number]>;
 const defaultOfTheDay = DEFAULT_CITIES[new Date().getDay() % DEFAULT_CITIES.length];
 
@@ -72,11 +73,6 @@ const LocalShroomKey = () => {
 
   return (
     <>
-      <p>
-        Input some coordinates below and to generate a key for mushrooms that grow nearby in this
-        time of year. This data is sourced from iNaturalist observations. The characteristics are
-        sourced from Wikipedia.
-      </p>
       <CoordinateActions onSubmit={handleSubmit} action={console.log}>
         <Input
           kind="number"
