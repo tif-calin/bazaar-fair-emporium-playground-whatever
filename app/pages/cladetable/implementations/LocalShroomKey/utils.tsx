@@ -35,6 +35,11 @@ type MycomorphboxData = {
 
 let DATA: MycomorphboxData | undefined = undefined;
 
+export const getNeabyMonthsForINaturalist = () => {
+  const currentMonth = new Date().getMonth() + 12;
+  return [currentMonth - 1, currentMonth, currentMonth + 1].map(m => ((m + 12) % 12) + 1);
+};
+
 // TODO: figure out an automated way to handle this (culi)
 const ottidsThatCauseErrors = new Set(['1044745', '212213', '459131', '466871', '687148']);
 export const generateMycomorphboxViz = async (latitude: number, longitude: number) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import FromNewickAndCsv from '../../components/CladeTable/components/FromNewickAndCsv';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -7,6 +7,7 @@ import { styled } from '@linaria/react';
 import type { CladeTableData } from '../../components/CladeTable/types';
 import {
   generateMycomorphboxViz,
+  getNeabyMonthsForINaturalist,
   makePredefinedColumn,
   MORPHOLOGY_CATEGORIES,
   prettyCoord,
@@ -31,16 +32,29 @@ const DEFAULT_CITIES = [
 ] as Array<[number, number]>;
 const defaultOfTheDay = DEFAULT_CITIES[new Date().getDay() % DEFAULT_CITIES.length];
 
+const iNatWebsiteLink = (lat: number, lng: number, radius = 12) => {
+  const params = new URLSearchParams({
+    lat: lat.toString(),
+    lng: lng.toString(),
+    months: getNeabyMonthsForINaturalist().join(','),
+    radius: radius.toString(),
+    taxon_id: '47170',
+    view: 'species',
+  });
+
+  return `https://www.inaturalist.org/observations?${params}`;
+};
+
 const LocalShroomKey = () => {
-  const [csv, setCsv] = React.useState('');
-  const [newick, setNewick] = React.useState('');
+  const [csv, setCsv] = useState('');
+  const [newick, setNewick] = useState('');
   const [tallies, setTallies] =
-    React.useState<Awaited<ReturnType<typeof generateMycomorphboxViz>>['tallies']>();
+    useState<Awaited<ReturnType<typeof generateMycomorphboxViz>>['tallies']>();
 
-  const [latitude, setLatitude] = React.useState(defaultOfTheDay[0]);
-  const [longitude, setLongitude] = React.useState(defaultOfTheDay[1]);
+  const [latitude, setLatitude] = useState(defaultOfTheDay[0]);
+  const [longitude, setLongitude] = useState(defaultOfTheDay[1]);
 
-  const handleFindMy = React.useCallback(() => {
+  const handleFindMy = useCallback(() => {
     if (!('geolocation' in navigator)) return console.warn('Geolocation is not supported');
 
     navigator.geolocation.getCurrentPosition(position => {
@@ -50,7 +64,7 @@ const LocalShroomKey = () => {
     });
   }, []);
 
-  const handleSubmit = React.useCallback(async () => {
+  const handleSubmit = useCallback(async () => {
     const { csv, newick, tallies } = await withInMemoryCache(
       generateMycomorphboxViz,
       latitude,
@@ -63,13 +77,13 @@ const LocalShroomKey = () => {
     setTallies(tallies);
   }, [latitude, longitude]);
 
-  const predefinedColumns: CladeTableData['columns'] = React.useMemo(() => {
+  const predefinedColumns: CladeTableData['columns'] = useMemo(() => {
     return (['name', ...MORPHOLOGY_CATEGORIES] as const).map(key =>
       makePredefinedColumn(key, tallies)
     );
   }, [tallies]);
 
-  const vizId = React.useId();
+  const vizId = useId();
 
   return (
     <>
@@ -103,7 +117,15 @@ const LocalShroomKey = () => {
         predefinedColumns={predefinedColumns}
         vizId={vizId}
       />
-      {!!newick && <ActionArea cladeTableId={vizId} />}
+      {!!newick && (
+        <ActionArea cladeTableId={vizId}>
+          {!!newick.length && (
+            <a href={iNatWebsiteLink(latitude, longitude)} target="_blank">
+              See on iNaturalist &rarr;
+            </a>
+          )}
+        </ActionArea>
+      )}
     </>
   );
 };
