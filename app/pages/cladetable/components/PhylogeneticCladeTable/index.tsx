@@ -4,17 +4,12 @@ import CladeTable from '../CladeTable';
 import { styled } from '@linaria/react';
 import { prepareOtolNewickTree, trimUnnecessaryParents } from './utils/prepareNewickTree';
 import type { CladeTableData } from '../CladeTable/types';
-import Input from '../Input';
 import RelatedAndWellKnownSpeciesForm from '../RelatedAndWellKnownSpeciesForm';
 import { groupByFunction } from '~/utils/collections';
 import parseNewickNodeForCladeTable from '../CladeTable/utils/parseNewickNodeForCladeTable';
 import type { PhylogeneticNodeData } from './types';
 import { parseCsv } from '../../utils/csv';
 import ActionArea from '../CladeTable/components/ActionArea';
-
-const DEFAULT_NEWICK =
-  // eslint-disable-next-line max-len
-  "((((Solanum_galapagense_ott200836,((Solanum_cheesmaniae_ott242855,Solanum_pimpinellifolium_ott797186),(Solanum_lycopersicum_var._cerasiforme_ott640492)Solanum_lycopersicum_ott378964)),(Solanum_chmielewskii_ott360692,(Solanum_pennellii_var._puberulum_ott508882)Solanum_pennellii_ott1069768)),(Solanum_chilense_ott378983,('[Lycopersicon] peruvianum var. humifusum ott837938','[Lycopersicon] peruvianum var. dentatum ott856663')Solanum_peruvianum_ott378975)),((Lycopersicon_hirsutum_f._glabratum_ott807666)Solanum_habrochaites_ott885264,Solanum_neorickii_ott885270));";
 
 const InputSection = styled.div`
   display: flex;
@@ -29,22 +24,17 @@ const InputSection = styled.div`
   }
 `;
 
-const Hr = styled.hr`
-  border-bottom: 4px double var(--clr-line);
-  margin: 1rem 0;
-`;
-
 const LatinNameCell = styled.div`
   font-style: italic;
 `;
 
 const PhylogeneticCladeTable = () => {
-  const [newickTree, setNewickTree] = React.useState(DEFAULT_NEWICK);
+  const [newickTree, setNewickTree] = React.useState('');
   const [csv, setCsv] = React.useState('');
 
-  const handleTextAreaChange = React.useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewickTree(e.target.value);
-  }, []);
+  // const handleTextAreaChange = React.useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setNewickTree(e.target.value);
+  // }, []);
 
   const cladeTableData = React.useMemo<CladeTableData<PhylogeneticNodeData>>(() => {
     const rootNode = parseNewick(newickTree);
@@ -104,20 +94,29 @@ const PhylogeneticCladeTable = () => {
 
   return (
     <>
-      <CladeTable<PhylogeneticNodeData> title="example" id={cladeTableId} data={cladeTableData} />
-      <ActionArea cladeTableId={cladeTableId} />
-      <Hr />
       <InputSection>
         <RelatedAndWellKnownSpeciesForm setNewick={setNewickTree} setCsv={setCsv} />
-        <Input
+        {/* <Input
           kind="textarea"
           name="newick"
           label="Newick"
           type="text"
           value={newickTree}
           onChange={handleTextAreaChange}
-        />
+        /> */}
       </InputSection>
+      {newickTree.length ? (
+        <>
+          <CladeTable<PhylogeneticNodeData>
+            title="Related and well-known species."
+            id={cladeTableId}
+            data={cladeTableData}
+          />
+          <ActionArea cladeTableId={cladeTableId} />
+        </>
+      ) : (
+        'No data to render.'
+      )}
     </>
   );
 };

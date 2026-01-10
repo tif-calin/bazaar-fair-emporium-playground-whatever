@@ -1,7 +1,9 @@
 import { styled } from '@linaria/react';
-import React from 'react';
+import { memo, useState } from 'react';
 import ToolBar from './components/ToolBar';
 import LocalShroomKey from './implementations/LocalShroomKey';
+import { objectEntries } from '~/utils/object';
+import SpeciesRelativesSnapshot from './implementations/SpeciesRelativesSnapshot';
 
 const bgSvg = btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
   <filter id="noise" x="0" y="0">
@@ -65,7 +67,59 @@ const SOURCE_URL =
   // eslint-disable-next-line max-len
   'https://github.com/tif-calin/bazaar-fair-emporium-playground-whatever/tree/main/app/pages/cladetable';
 
+const IMPLEMENTATIONS = {
+  LocalShroomKey: {
+    component: LocalShroomKey,
+    title: 'LocalShroomKey',
+    description:
+      'Input some coordinates below and to generate a key for mushrooms that grow nearby in this time of year. This data is sourced from iNaturalist observations. The characteristics are sourced from Wikipedia.',
+  },
+  SpeciesRelativesSnapshot: {
+    component: SpeciesRelativesSnapshot,
+    title: 'SpeciesRelativesSnapshot',
+    description:
+      'Enter in a species and get back a cladogram giving you a snapshot of closely related species that are "popular" based on their Wikipedia page hits.',
+  },
+};
+
+const ImplementationSelector = styled.ul`
+  display: flex;
+   gap: 1rem;
+  overflow-x: auto;
+  padding: 2px;
+  position: relative;
+  max-width: 100%;
+
+  & > .implementation-option {
+    border: 1px solid var(--clr-line);
+     border-radius: var(--msr-radius);
+    cursor: pointer;
+    transition: backdrop-filter 0.15s ease-in-out;
+    min-width: max(80%, 350px);
+
+    & p { line-height: 1.45; }
+
+    & > button {
+      padding: 0.5rem;
+    }
+
+    &.is-active {
+      backdrop-filter: invert(0.1);
+
+      &:not(:focus-within) { border-color: var(--clr-focus); }
+    }
+
+    &:focus-within {
+      border-color: #0000;
+      outline: 2px dashed var(--clr-focus);
+    }
+  }
+`;
+
 const CladeTablePage = () => {
+  const [selectedKey, setSelectedKey] = useState<keyof typeof IMPLEMENTATIONS>('LocalShroomKey');
+  const SelectedComponent = IMPLEMENTATIONS[selectedKey].component;
+
   return (
     <Page>
       <header>
@@ -73,8 +127,24 @@ const CladeTablePage = () => {
       </header>
       <main>
         <ToolBar />
-        {/* <PhylogeneticCladeTable /> */}
-        <LocalShroomKey />
+        <ImplementationSelector role="tablist">
+          {objectEntries(IMPLEMENTATIONS).map(([key, { title, description }]) => (
+            <li
+              className={`implementation-option ${selectedKey === key ? 'is-active' : ''}`}
+              key={key}
+              role="presentation"
+            >
+              <button role="tab" onClick={() => setSelectedKey(key)}>
+                <p>
+                  <span style={{ fontWeight: '450' }}>{title}</span>
+                  <br />
+                  {description}
+                </p>
+              </button>
+            </li>
+          ))}
+        </ImplementationSelector>
+        <SelectedComponent />
       </main>
       <footer>
         <a href={SOURCE_URL}> steal this </a>
@@ -83,4 +153,4 @@ const CladeTablePage = () => {
   );
 };
 
-export default React.memo(CladeTablePage);
+export default memo(CladeTablePage);
