@@ -62,6 +62,8 @@ const Page = styled.div`
       }
     }
   }
+
+  & .isnt-active { display: none; }
 `;
 
 const SOURCE_URL =
@@ -147,7 +149,11 @@ const CladeTablePage = () => {
             </li>
           ))}
         </ImplementationSelector>
-        <SelectedComponent />
+        {Object.entries(IMPLEMENTATIONS).map(([key, props]) => (
+          <div key={key} className={key === selectedKey ? undefined : 'isnt-active'}>
+            <props.component />
+          </div>
+        ))}
       </main>
       <footer>
         <a href={SOURCE_URL}> steal this </a>
