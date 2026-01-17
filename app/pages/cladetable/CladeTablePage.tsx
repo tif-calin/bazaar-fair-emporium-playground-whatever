@@ -1,9 +1,10 @@
 import { styled } from '@linaria/react';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import ToolBar from './components/ToolBar';
 import LocalShroomKey from './implementations/LocalShroomKey';
 import { objectEntries } from '~/utils/object';
 import SpeciesRelativesSnapshot from './implementations/SpeciesRelativesSnapshot';
+import useQueryParamState from '~/utils/useQueryParamState';
 
 const bgSvg = btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
   <filter id="noise" x="0" y="0">
@@ -117,8 +118,10 @@ const ImplementationSelector = styled.ul`
 `;
 
 const CladeTablePage = () => {
-  const [selectedKey, setSelectedKey] = useState<keyof typeof IMPLEMENTATIONS>('LocalShroomKey');
-  const SelectedComponent = IMPLEMENTATIONS[selectedKey].component;
+  const [selectedKey, setSelectedKey] = useQueryParamState<keyof typeof IMPLEMENTATIONS>(
+    'tab',
+    'LocalShroomKey'
+  );
 
   return (
     <Page>
