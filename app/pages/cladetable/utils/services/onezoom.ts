@@ -20,7 +20,7 @@ type OneZoomPopularityListResult = {
 /**
  * API docs: https://www.onezoom.org/popularity
  */
-const BASE_URL = 'https://corsproxy.io/https://www.onezoom.org/popularity/list';
+const BASE_URL = 'https://www.onezoom.org/popularity/list';
 
 type GetPopularityListOpts = {
   key: string;
