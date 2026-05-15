@@ -6,8 +6,9 @@ export const PAGES = [
     componentPath: "pages/refuge2/index.tsx",
   },
   {
-    urlPath: "cladetable",
-    componentPath: "pages/cladetable/index.tsx",
+  {
+    urlPath: 'make-cute-icon',
+    componentPath: 'pages/make-cute-icon/index.tsx',
   },
 ];
 

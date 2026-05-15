@@ -10,4 +10,5 @@ type Params = {
   "/": {};
   "/refuge2": {};
   "/cladetable": {};
+  "/make-cute-icon": {};
 };
