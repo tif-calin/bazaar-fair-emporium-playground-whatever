@@ -18,9 +18,9 @@ export const drawIcon = (seed: string) => {
   let path = '';
   switch (kind) {
     case 'heart': {
-      const wonk1 = (randNum1 - 0.5) * 9;
-      const wonk2 = (randNum2 - 0.5) * 8;
-      const wonk3 = (randNum3 - 0.5) * 7;
+      const wonk1 = (randNum1 - 0.5) * 6;
+      const wonk2 = (randNum2 - 0.5) * 7;
+      const wonk3 = (randNum3 - 0.5) * 5;
 
       path = `
         M0 200 v-200 h200
