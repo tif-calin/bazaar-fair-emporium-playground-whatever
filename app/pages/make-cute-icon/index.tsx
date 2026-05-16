@@ -3,7 +3,6 @@ import React from 'react';
 import download from 'downloadjs';
 import * as htmlToImage from 'html-to-image';
 import HandDrawnHeart2 from './components/HandDrawnHeart2';
-import HandDrawnHeart1 from './components/HandDrawnHeart1';
 
 const Page = styled.div`
   --color-eminence: #4a2671;
@@ -78,7 +77,7 @@ const MakeCuteIconPage = () => {
         <p>I built this generator to generate cutesy icons based on a seed.</p>
         <input type="text" placeholder="Enter a seed..." onChange={e => setSeed(e.target.value)} />
         <output>
-          <HandDrawnHeart1 seed={seed} svgId={`${svgId}-1`} />
+          {/* <HandDrawnHeart1 seed={seed} svgId={`${svgId}-1`} /> */}
           <HandDrawnHeart2 seed={seed} svgId={`${svgId}-2`} />
         </output>
         <DownloadButton elementId={`${svgId}-2`} fileName={`${seed}.png`}>

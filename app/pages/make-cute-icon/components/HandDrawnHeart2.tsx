@@ -6,25 +6,30 @@ type Props = {
   svgId: string;
 };
 
+/**
+ * Thanks to Chris Coyier.
+ *
+ * https://css-tricks.com/creating-a-pencil-effect-in-svg/
+ */
 const HandDrawnHeart2 = ({ seed, svgId }: Props) => {
   const { path, rotation, fill } = useMemo(() => drawIcon(seed), [seed]);
 
   return (
-    <svg id={svgId} width="775" height="775" viewBox="0 0 400 400">
+    <svg id={svgId} viewBox="0 0 400 400" width="200" height="200">
       <defs>
         <filter
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
           filterUnits="objectBoundingBox"
           id={`roughPaper-${seed}`}
         >
-          <feTurbulence type="fractalNoise" baseFrequency="128" numOctaves="1" result="noise" />
+          <feTurbulence type="fractalNoise" baseFrequency="128.5" numOctaves="1" result="noise" />
           <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="2" result="diffLight">
-            <feDistantLight azimuth="45" elevation="55"></feDistantLight>
+            <feDistantLight azimuth="45" elevation="55" />
           </feDiffuseLighting>
-          <feGaussianBlur in="diffLight" stdDeviation="0.75" result="dlblur"></feGaussianBlur>
+          <feGaussianBlur in="diffLight" stdDeviation="0.75" result="dlblur" />
           <feComposite
             operator="arithmetic"
             k1="1.2"
@@ -44,19 +49,14 @@ const HandDrawnHeart2 = ({ seed, svgId }: Props) => {
           filterUnits="objectBoundingBox"
           id={`pencil-${seed}`}
         >
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="1.2"
-            numOctaves="3"
-            result="noise"
-          ></feTurbulence>
+          <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" result="noise" />
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
             scale="3"
             in="SourceGraphic"
             result="newSource"
-          ></feDisplacementMap>
+          />
         </filter>
         <filter
           x="-20%"
@@ -72,13 +72,13 @@ const HandDrawnHeart2 = ({ seed, svgId }: Props) => {
             numOctaves="5"
             stitchTiles="stitch"
             result="f1"
-          ></feTurbulence>
+          />
           <feColorMatrix
             type="matrix"
             values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5"
             result="f2"
-          ></feColorMatrix>
-          <feComposite operator="in" in2="f2" in="SourceGraphic" result="f3"></feComposite>
+          />
+          <feComposite operator="in" in2="f2" in="SourceGraphic" result="f3" />
         </filter>
         <filter
           x="-20%"
@@ -94,26 +94,21 @@ const HandDrawnHeart2 = ({ seed, svgId }: Props) => {
             numOctaves="5"
             stitchTiles="stitch"
             result="f1"
-          ></feTurbulence>
+          />
           <feColorMatrix
             type="matrix"
             values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5"
             result="f2"
-          ></feColorMatrix>
-          <feComposite operator="in" in2="f2b" in="SourceGraphic" result="f3"></feComposite>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="1.2"
-            numOctaves="3"
-            result="noise"
-          ></feTurbulence>
+          />
+          <feComposite operator="in" in2="f2b" in="SourceGraphic" result="f3" />
+          <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" result="noise" />
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
             scale="12.5"
             in="f3"
             result="f4"
-          ></feDisplacementMap>
+          />
         </filter>
         <filter
           x="-20%"
@@ -133,7 +128,7 @@ const HandDrawnHeart2 = ({ seed, svgId }: Props) => {
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
-            scale="7"
+            scale="15"
             in="SourceGraphic"
             in2="f1"
             result="f4"
@@ -148,63 +143,64 @@ const HandDrawnHeart2 = ({ seed, svgId }: Props) => {
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
-            scale="9"
+            scale="20"
             in="SourceGraphic"
             in2="f2"
             result="f5"
           />
           <feTurbulence
-            type="fractalNoise"
             baseFrequency="1.2"
             numOctaves="2"
-            seed="100"
             result="f3"
+            seed="100"
+            type="fractalNoise"
           />
           <feDisplacementMap
-            xChannelSelector="R"
-            yChannelSelector="G"
-            scale="3"
             in="SourceGraphic"
             in2="f3"
             result="f6"
+            scale="25"
+            xChannelSelector="R"
+            yChannelSelector="G"
           />
-          <feBlend mode="multiply" in2="f4" in="f5" result="out1"></feBlend>
-          <feBlend mode="multiply" in="out1" in2="f6" result="out2"></feBlend>
+          <feBlend mode="multiply" in2="f4" in="f5" result="out1" />
+          <feBlend mode="multiply" in="out1" in2="f6" result="out2" />
         </filter>
       </defs>
       <g
         id={`icon-${seed}`}
+        filter={`url(#roughPaper-${seed})`}
         transform-origin="200 200"
         transform={`translate(0, -125) rotate(${-135 + rotation})`}
       >
-        <path d={path} fill={fill} filter={`url(#roughPaper-${seed})`} />
+        <path d={path} fill={fill} />
         <path
           d={path}
           fill={`none`}
           filter={`url(#pencil-${seed})`}
-          stroke-width="10"
-          stroke="#1115"
+          stroke-width="20"
+          stroke="#1116"
         />
         <path
           d={path}
           fill={`none`}
           filter={`url(#pencil2-${seed})`}
-          stroke-width="10"
-          stroke="#1115"
+          stroke-width="20"
+          stroke="#1116"
         />
         <path
           d={path}
           fill={`none`}
           filter={`url(#pencil3-${seed})`}
-          stroke-width="10"
-          stroke="#1115"
+          stroke-width="20"
+          stroke="#111a"
         />
         <path
           d={path}
           fill={`none`}
           filter={`url(#pencil4-${seed})`}
-          stroke-width="10"
-          stroke="#1115"
+          stroke-width="20"
+          stroke="#1114"
         />
       </g>
     </svg>
