@@ -6,6 +6,7 @@ export const SCHEMA = {
   __version: '4.0.0',
   loci: [
     {
+      fieldId: 21112,
       slug: 'piebald',
       name: 'W+S Locus (white/piebald/spotting/KIT)',
       values: [
@@ -19,6 +20,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21114,
       slug: 'red',
       name: 'O Locus (orange/red/SOX10)',
       values: [
@@ -30,6 +32,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21118,
       slug: 'black',
       name: 'B Locus (black/brown/TYRP1)',
       values: [
@@ -41,6 +44,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21119,
       slug: 'agouti',
       name: 'A Locus (agouti/tabby/ASIP)',
       values: [
@@ -51,6 +55,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21120,
       slug: 'striping',
       name: 'Ti+Mc Locus (tabby patterns)',
       values: [
@@ -63,6 +68,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21121,
       slug: 'dilution',
       name: 'D Locus (dilution/MLPH)',
       values: [
@@ -73,6 +79,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21122,
       slug: 'silver',
       name: 'I Locus (silver/smoke/PMEL)',
       values: [
@@ -83,6 +90,7 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21123,
       slug: 'colorpoint',
       name: 'C Locus (colorpoint/tyrosinase)',
       values: [
@@ -97,11 +105,13 @@ export const SCHEMA = {
       ],
     },
     {
+      fieldId: 21124,
       slug: 'length',
       name: 'L Locus (hair length/FGF5)',
       values: ['(L/-) short', '(l/l) long', 'cannot be determined'],
     },
   ],
+  // field_ids: 21125, 21154, 21155
   tags: [
     'agouti is charcoal (Aᵖᵇ)',
     'agouti is pseudomelanistic or has dark cape, high EDN3',
@@ -201,74 +211,35 @@ There are a couple distinct mutations which lead to a tailless cat, including on
 
 export type CatCoatObservation = {
   /** W Locus, KIT */
-  piebald:
-    | '(w⁺/w⁺) no white spotting'
-    | '(wˢ/-) white spotting, low (grades 1-4)'
-    | '(wˢ/-) white spotting, medium (grades 5-6)'
-    | '(wˢ/-) white spotting, high (grades 7-10)'
-    | '(W/-) dominant white'
-    | 'masked by (c/c)'
-    | 'cannot be determined';
+  piebald: (typeof SCHEMA)['loci'][0]['values'][number];
 
   /** O Locus, SOX10 */
-  red:
-    | '(O/O or O/Y) red'
-    | '(O/o) tortoiseshell'
-    | '(o/o or o/Y) non-red'
-    | 'masked by (W/-), (wˢ/wˢ), or (c/c)'
-    | 'cannot be determined';
+  red: (typeof SCHEMA)['loci'][1]['values'][number];
 
   /** B Locus, TYRP1 */
-  black:
-    | '(B/-) black'
-    | '(b/b or b/bˡ) chocolate'
-    | '(bˡ/bˡ) cinnamon'
-    | 'masked by (W/-), (wˢ/wˢ), (c/c), or (O/-)'
-    | 'cannot be determined';
+  black: (typeof SCHEMA)['loci'][2]['values'][number];
 
   /** A Locus, ASIP */
-  agouti:
-    | '(A/-) agouti'
-    | '(a/a) solid'
-    | 'masked by (W/-), (wˢ/wˢ), (c/c), or (O/-)'
-    | 'cannot be determined';
+  agouti: (typeof SCHEMA)['loci'][3]['values'][number];
 
   /** Mc+Ti Loci */
-  striping:
-    | '(Tiᴬ) ticked'
-    | '(Ti⁺, Mcᴹ) mackerel'
-    | '(Ti⁺, Mcᴹ, Ms) spotted'
-    | '(Ti⁺, mcᵇ/mcᵇ) blotched'
-    | 'masked by (W/-), (wˢ/wˢ), (c/c), or (a/a)'
-    | 'cannot be determined';
+  striping: (typeof SCHEMA)['loci'][4]['values'][number];
 
   /* D Locus, MLPH */
-  dilution:
-    | '(D/-) dense'
-    | '(d/d) dilute'
-    | 'masked by (W/-), (wˢ/wˢ), or (c/c)'
-    | 'cannot be determined';
+  dilution: (typeof SCHEMA)['loci'][5]['values'][number];
 
   /** I Locus, PMEL */
-  silver:
-    | '(i/i) uninhibited'
-    | '(I/-) silver or smoke'
-    | 'masked by (W/-), (wˢ/wˢ), or (c/c)'
-    | 'cannot be determined';
+  silver: (typeof SCHEMA)['loci'][6]['values'][number];
 
   /** C Locus, TYR */
-  colorpoint:
-    | '(C/-) full color'
-    | '(cˢ/cˢ) siamese-pointed'
-    | '(cᵇ/cˢ or cˢ/cᵇ) tonkinese-mink'
-    | '(cᵇ/cᵇ) burmese-sepia'
-    | '(cᵃ/cᵃ) blue-eyed albinism'
-    | '(c/c) pink-eyed albinism'
-    | 'masked by (W/-) or (wˢ/wˢ)'
-    | 'cannot be determined';
+  colorpoint: (typeof SCHEMA)['loci'][7]['values'][number];
 
   /** L Locus, FGF5 */
-  length: '(L/-) short' | '(l/l) long' | 'cannot be determined';
+  length: (typeof SCHEMA)['loci'][8]['values'][number];
 
   tags?: Array<(typeof SCHEMA.tags)[number]>;
 };
+
+const LocusSlugSet = new Set<string>(SCHEMA.loci.map(locus => locus.slug));
+export type LocusSlug = (typeof SCHEMA)['loci'][number]['slug'];
+export const isLocusSlug = (str: string): str is LocusSlug => LocusSlugSet.has(str);

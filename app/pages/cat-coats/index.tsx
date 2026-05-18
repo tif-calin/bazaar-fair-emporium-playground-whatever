@@ -56,8 +56,8 @@ const CatCoatPage = () => {
         <p>
           This is the home page of the <a href="https://www.inaturalist.org/projects/cat-coat-genes-project">Cat Coat Genes iNaturalist Project</a>. This page contains a thorough guide for anyone who wants to get involved with annotating cat observations.
         </p>
-        <ObservationExplorer />
         <ClassificationGuide />
+        <ObservationExplorer />
       </main>
     </Page>
   );
