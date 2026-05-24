@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
 
-import { marked } from 'marked';
-
 export const SCHEMA = {
-  __version: '4.0.0',
+  __version: '4.0.1',
   loci: [
     {
       fieldId: 21112,
@@ -145,11 +143,11 @@ export const SCHEMA = {
     'tail is rumpy/kinked (M/- or jp/jp)',
     'vitiligo',
   ],
-  guide: marked.parse(
-    `
+  guide: `
 ## Primary Loci
-
 Cat coat genetics are usually organized into a few central genes or "loci" that are responsible for most observable traits. This guide organizes it into 9 primary traits that we think are the most important for feral/wild cats. It's important to note there are several other genes and traits that are important to breeders but are practically non-existant in the wild.
+
+{{TOC}}
 
 ### W+S Locus (white/piebald/spotting/KIT)
 A W/- ("dominant white") cat is the most common white cat though less than 5% of feral cats are (W/-). This gene prevents the migration of pigment cells during embryonic development. W/- cats will often have blue or odd eyes and be deaf or partially deaf on the side of the blue eye. Nose leather and paw pads will be bubblegum pink and the skin through the fur should be a pale pink. If the nose leather has a black outline, a brown spot, or is entirely slate grey/liver colored, the cat is NOT "Dominant White" (W/-) — it is a "High-White Spotted" (S¹⁰) cat or a very very pale Cream/Red (O/-, d/d) cat. Older red (O/-) cats develop freckles on the nose/lips while (W/-) cats do not. The other two—much less common—genotypes for a white cat are pointed cats and albino cats (both related to the C-Locus). W/- kittens may be born with some color on the head that fades away after a year or so. Traditionally, the W-Locus and the S-Locus (piebald or white spotting) were treated as separate loci, but recent research has shown they both act on the KIT gene and make up a single locus which also includes Birman gloving (wᵍ). The dominance hierarchy then being (W/- > wˢ > wᵍ > w⁺). The wˢ allele is extremely variable in expression and interacts with several potential modifier genes. Although a (wˢ/w⁺) will typically exhibit less white spotting than a (wˢ/wˢ) cat, this cannot be reliably determined from visual ID. The Neil Todd grading scale from 1 to 10 is commonly used to grade the white spotting (from low to high), but we've grouped the grades here into "low" (e.g. locket, mitted, or tuxedo), "medium" (e.g. mask-and-mantle, pied, cap-and-saddle), and "high" (e.g. cap-and-saddle, harlequin, van, magpie) for simplicity. The line between a tortie and a calico is usually around grade 5 (sometimes referred to as a tortico). Even the most extreme white spotting usually has the tiniest speck of color between the ears or on the tail—a key feature from distinguishing W/- cats from wˢ¹⁰ cats.
@@ -207,8 +205,7 @@ There are a number of factors that can be confused with rufousness:
 
 ### Tailless genes
 There are a couple distinct mutations which lead to a tailless cat, including one that is lethal. The Manx mutation (M Locus, TBXT) is lethal when homozygous (M/M), but (M/m⁺) results in no tail or a short tail with high variability in expression (graded as rumpy, stumpy, and longy). Because the gene shortens the spine, it can shorten it too much and cause spina bifida, paralysis of the hind legs, and incontinence. The Japanese Bobtail mutation (Jp locus, HES7) causes the tail vertebrae to misshape and fuse, creating a kinked "pom-pom" shape. It is not lethal and it is recessive (jp/jp). There are also dominant tail mutations found in American feral populations (American Bobtail/Pixie-Bob). Most of them seem to be the Manx gene (TBXT) or some novel allele of it. They usually have tails that are 50% length (hock length) and don't have spinal issues.
-  `.trim()
-  ),
+  `.trim(),
 } as const;
 
 export type CatCoatObservation = {

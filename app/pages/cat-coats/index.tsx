@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { SCHEMA } from './types';
 import { styled } from '@linaria/react';
 import ObservationExplorer from './components/ObservationExplorer';
+import { mdToHtml } from './utils/markdown';
 
 const Page = styled.div`
   --fnt-sans: var(--font-system-ui);
@@ -18,9 +19,8 @@ const Page = styled.div`
      border-radius: var(--msr-radius);
      border-bottom: 4px double var(--clr-line);
     padding: 1rem;
-    width: 100%;
-     max-width: calc(90vw - 20rem);
-     min-width: 250px;
+    width: calc(90vw - 20rem);
+     min-width: calc(250px + 40vw);
   }
 
   & p, & ul, & ol {
@@ -42,10 +42,22 @@ const Page = styled.div`
 
 const StyledArticle = styled.article`
   & p + :where(ul, ol) { margin-top: -1rem; }
+
+  & .toc {
+    border: 1px solid var(--clr-line);
+    padding: 0.5rem;
+    width: fit-content;
+
+    & ul {
+      margin-bottom: 0;
+    }
+  }
 `;
 
-const ClassificationGuide = () => {
-  return <StyledArticle dangerouslySetInnerHTML={{ __html: SCHEMA.guide }} />;
+const ClassificationGuide = async () => {
+  const __html = await mdToHtml(SCHEMA.guide);
+
+  return <StyledArticle dangerouslySetInnerHTML={{ __html }} />;
 };
 
 const CatCoatPage = () => {
