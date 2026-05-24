@@ -32,11 +32,6 @@ body {
     padding-left: 1rem;
   }
 
-  & a {
-    color: inherit;
-    text-decoration: none;
-  }
-
   & a,
   & button,
   & input[type=checkbox]:not(:disabled),

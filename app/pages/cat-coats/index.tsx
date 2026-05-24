@@ -6,11 +6,21 @@ import { mdToHtml } from './utils/markdown';
 
 const Page = styled.div`
   --fnt-sans: var(--font-system-ui);
-  font-family: var(--fnt-sans);
+  --clr-link-ext: #1c7ed6;
+  --clr-link-visited: #5f3dc4;
+  --clr-link-jump: #0d375e;
+
+  @media (prefers-color-scheme: dark) {
+    --clr-link-ext: #74c0fc;
+    --clr-link-visited: #9775fa;
+    --clr-link-jump: #d0ebff;
+  }
 
   display: flex;
    align-items: center;
    flex-direction: column;
+   gap: 1rem;
+  font-family: var(--fnt-sans);
   padding: 1rem;
 
   & > *:where(header, main):not(:empty) {
@@ -23,9 +33,19 @@ const Page = styled.div`
      min-width: calc(250px + 40vw);
   }
 
-  & p, & ul, & ol {
-    margin-bottom: 1rem;
+  & :where(a) {
+    text-decoration: none;
+
+    &:link { color: var(--clr-link-ext); }
+    &:visited { color: var(--clr-link-visited); }
+    &:hover { text-decoration: underline; }
+    &[href^="#"] {
+      color: var(--clr-link-jump);
+      text-decoration: underline dashed;
+    }
   }
+
+  & p, & ul, & ol { margin-bottom: 1rem; }
 
   & h2 {
     font-size: 1.25em;
@@ -44,12 +64,17 @@ const StyledArticle = styled.article`
   & p + :where(ul, ol) { margin-top: -1rem; }
 
   & .toc {
-    border: 1px solid var(--clr-line);
+    background-color: var(--clr-bg);
+    border-left: 3px solid var(--clr-line);
     padding: 0.5rem;
     width: fit-content;
 
     & ul {
       margin-bottom: 0;
+    }
+
+    & a {
+      text-decoration: none;
     }
   }
 `;
@@ -63,10 +88,13 @@ const ClassificationGuide = async () => {
 const CatCoatPage = () => {
   return (
     <Page>
+      <header>
+        <h1>Cat Coat Genes Project</h1>
+      </header>
       <main>
         {/* prettier-ignore */}
         <p>
-          This is the home page of the <a href="https://www.inaturalist.org/projects/cat-coat-genes-project">Cat Coat Genes iNaturalist Project</a>. This page contains a thorough guide for anyone who wants to get involved with annotating cat observations.
+          This is the home page of the <a href="https://www.inaturalist.org/projects/cat-coat-genes-project">Cat Coat Genes Project on iNaturalist</a>. This page contains a thorough guide for anyone who wants to get involved with annotating cat observations.
         </p>
         <ClassificationGuide />
         <ObservationExplorer />
