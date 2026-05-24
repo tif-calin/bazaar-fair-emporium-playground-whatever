@@ -6,9 +6,10 @@ import { mdToHtml } from './utils/markdown';
 
 const Page = styled.div`
   --fnt-sans: var(--font-system-ui);
-  --clr-link-ext: #1c7ed6;
-  --clr-link-visited: #5f3dc4;
+  --clr-link-ext: #1c7ed6; //#0000ee
+  --clr-link-visited: #5f3dc4; // #551a8b
   --clr-link-jump: #0d375e;
+  --clr-link-active: #faa700; // #ff0000;
 
   @media (prefers-color-scheme: dark) {
     --clr-link-ext: #74c0fc;
@@ -39,9 +40,11 @@ const Page = styled.div`
     &:link { color: var(--clr-link-ext); }
     &:visited { color: var(--clr-link-visited); }
     &:hover { text-decoration: underline; }
+    &:active { color: var(--clr-link-active); }
     &[href^="#"] {
       color: var(--clr-link-jump);
-      text-decoration: underline dashed;
+      &:active { color: var(--clr-link-active); }
+      &:hover { text-decoration: underline dashed; }
     }
   }
 
@@ -71,10 +74,6 @@ const StyledArticle = styled.article`
 
     & ul {
       margin-bottom: 0;
-    }
-
-    & a {
-      text-decoration: none;
     }
   }
 `;
