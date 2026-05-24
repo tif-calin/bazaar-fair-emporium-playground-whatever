@@ -8,7 +8,7 @@ export const SCHEMA = {
     {
       fieldId: 21112,
       slug: 'piebald',
-      name: 'W+S Locus (white/piebald/spotting/KIT)',
+      name: 'W & S Locus (white/piebald/spotting/KIT)',
       values: [
         '(w⁺/w⁺) no white spotting',
         '(wˢ/-) white spotting, low (grades 1-4)',
@@ -39,7 +39,7 @@ export const SCHEMA = {
         '(B/-) black',
         '(b/b or b/bˡ) chocolate',
         '(bˡ/bˡ) cinnamon',
-        'masked by (W/-), (wˢ/wˢ), (c/c), or (O/-)',
+        'masked by (W/-), (wˢ/wˢ), (c/c), (O/O), or (O/Y)',
         'cannot be determined',
       ],
     },
@@ -50,7 +50,7 @@ export const SCHEMA = {
       values: [
         '(A/-) agouti',
         '(a/a) solid',
-        'masked by (W/-), (wˢ/wˢ), (c/c), or (O/-)',
+        'masked by (W/-), (wˢ/wˢ), (c/c), (O/O), or (O/Y)',
         'cannot be determined',
       ],
     },
@@ -130,6 +130,7 @@ export const SCHEMA = {
     'lentigo freckles',
     'munchkin',
     'polydactyl',
+    'pregnant',
     'rufousness is high',
     'salmiak (wˢᵃˡ)',
     'skunk stripes',
@@ -148,8 +149,9 @@ export const SCHEMA = {
     `
 ## Primary Loci
 
-### W+S Locus (white/piebald/spotting/KIT)
+Cat coat genetics are usually organized into a few central genes or "loci" that are responsible for most observable traits. This guide organizes it into 9 primary traits that we think are the most important for feral/wild cats. It's important to note there are several other genes and traits that are important to breeders but are practically non-existant in the wild.
 
+### W+S Locus (white/piebald/spotting/KIT)
 A W/- ("dominant white") cat is the most common white cat though less than 5% of feral cats are (W/-). This gene prevents the migration of pigment cells during embryonic development. W/- cats will often have blue or odd eyes and be deaf or partially deaf on the side of the blue eye. Nose leather and paw pads will be bubblegum pink and the skin through the fur should be a pale pink. If the nose leather has a black outline, a brown spot, or is entirely slate grey/liver colored, the cat is NOT "Dominant White" (W/-) — it is a "High-White Spotted" (S¹⁰) cat or a very very pale Cream/Red (O/-, d/d) cat. Older red (O/-) cats develop freckles on the nose/lips while (W/-) cats do not. The other two—much less common—genotypes for a white cat are pointed cats and albino cats (both related to the C-Locus). W/- kittens may be born with some color on the head that fades away after a year or so. Traditionally, the W-Locus and the S-Locus (piebald or white spotting) were treated as separate loci, but recent research has shown they both act on the KIT gene and make up a single locus which also includes Birman gloving (wᵍ). The dominance hierarchy then being (W/- > wˢ > wᵍ > w⁺). The wˢ allele is extremely variable in expression and interacts with several potential modifier genes. Although a (wˢ/w⁺) will typically exhibit less white spotting than a (wˢ/wˢ) cat, this cannot be reliably determined from visual ID. The Neil Todd grading scale from 1 to 10 is commonly used to grade the white spotting (from low to high), but we've grouped the grades here into "low" (e.g. locket, mitted, or tuxedo), "medium" (e.g. mask-and-mantle, pied, cap-and-saddle), and "high" (e.g. cap-and-saddle, harlequin, van, magpie) for simplicity. The line between a tortie and a calico is usually around grade 5 (sometimes referred to as a tortico). Even the most extreme white spotting usually has the tiniest speck of color between the ears or on the tail—a key feature from distinguishing W/- cats from wˢ¹⁰ cats.
 
 ### O Locus (orange/red/SOX10)

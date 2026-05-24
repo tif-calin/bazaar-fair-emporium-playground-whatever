@@ -1,4 +1,4 @@
-Because I don't wanna just delete older versions of the schema I'm keeping it here in this log.## version 3
+Because I don't wanna just delete older versions of the schema I'm keeping it here in this log.
 
 ## terms/glossary
 - caliby
@@ -184,7 +184,7 @@ export const INAT_FIELDS: INaturalistObservationField[] = [
       '(B/-) black',
       '(b/b or b/bˡ) chocolate',
       '(bˡ/bˡ) cinnamon',
-      'masked by (W/-), (wˢ/wˢ), (c/c), or (O/-)',
+      'masked by (W/-), (wˢ/wˢ), (c/c), (O/O), or (O/Y)',
       'cannot be determined',
     ].join('|'),
   },
@@ -199,7 +199,7 @@ export const INAT_FIELDS: INaturalistObservationField[] = [
     allowedValues: [
       '(A/-) agouti',
       '(a/a) solid',
-      'masked by (W/-), (wˢ/wˢ), (c/c), or (O/-)',
+      'masked by (W/-), (wˢ/wˢ), (c/c), (O/O), or (O/Y)',
       'cannot be determined',
     ].join('|'),
   },
