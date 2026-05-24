@@ -1,346 +1,160 @@
-/* 2004.12 https://tantek.com/log/2004/undohtml.css */
-/* 2005.05 https://developer.apple.com/internet/webcontent/quality/css.html
-/* 2008.02 https://meyerweb.com/eric/tools/css/reset/reset200802.css */
-/* 2010.05 http://www.vcarrer.com/2010/05/css-mini-reset.html */
-/* 2011.01 https://meyerweb.com/eric/tools/css/reset/ */
-/* 2013.10 https://clarle.github.io/yui3/yui/docs/cssreset/ */
-/* 2018.11 https://necolas.github.io/normalize.css/ */
-/* 2021.01 https://jgthms.com/minireset.css/ */
-/* 2021.09 https://csstools.github.io/sanitize.css/ */
-/* 2021.11 https://www.joshwcomeau.com/css/custom-css-reset/ */
-/* 2023.09 https://piccalil.li/blog/a-more-modern-css-reset/ */
-/* 2024.03 https://github.com/Lazzzer00/Best-CSS-Reset-2024 */
-/* 2024.08 https://elad2412.github.io/the-new-css-reset/ */
-/* 2024.11 https://github.com/kkrishguptaa/reseter.css */
+/*
+2004.12 https://tantek.com/log/2004/undohtml.css
+2005.05 https://developer.apple.com/internet/webcontent/quality/css.html
+2008.02 https://meyerweb.com/eric/tools/css/reset/reset200802.css
+ - historically the most popular reset
+2010.05 http://www.vcarrer.com/2010/05/css-mini-reset.html
+2011.01 https://meyerweb.com/eric/tools/css/reset/
+2013.10 https://clarle.github.io/yui3/yui/docs/cssreset/
+2018.11 https://necolas.github.io/normalize.css/
+ - a different approach focusing on browser consistency instead of total resets
+2021.01 https://jgthms.com/minireset.css/
+2021.09 https://csstools.github.io/sanitize.css/
+ - like normalize but introduced many opinionated defaults
+2021.11 https://www.joshwcomeau.com/css/custom-css-reset/
+ - grade A
+2023.09 https://piccalil.li/blog/a-more-modern-css-reset/
+ - grade A
+2024.03 https://github.com/Lazzzer00/Best-CSS-Reset-2024
+2024.08 https://elad2412.github.io/the-new-css-reset/
+ - a new approach to resetting CSS that targets browser stylesheets
+ - uses rules like `all: unset` and `display: revert` but then manually adds back certain defaults
+2024.11 https://github.com/kkrishguptaa/reseter.css
+ - an uncritical frankenstein of all previous resets
+ - contains a lot of old rules that actively breaks things like dialogs
+2025.04 https://fokus.dev/tools/uaplus/
+*/
 
-*,
-*::after,
-*::before {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-}
+@layer reset {
+  /* Create a root stacking context for frameworks. */
+  #root, #__next { isolation: isolate; }
 
-/* reset default text opacity of input placeholder */
-*::placeholder {
-  color: unset;
-}
-
-/* fix the feature of 'hidden' attribute */
-*:where([hidden]) {
-  display: none;
-}
-
-/* anything that has been anchored to should have extra scroll margin */
-*:target {
-  scroll-margin-block: 5ex;
-}
-
-*:where(:not(html, iframe, canvas, img, svg, video, audio):not(svg *, symbol *)) {
-  all: unset;
-  display: revert;
-}
-
-*:where(:root) {
-  line-height: 1.5;
-  box-sizing: border-box;
-}
-
-/* revert for bug in Chromium browsers */
-/* fix for the content editable attribute will work properly */
-/* webkit-user-select: auto; added for Safari in case of using user-select:none on wrapper element */
-*:where([contenteditable]:not([contenteditable="false"])) {
-  -webkit-line-break: after-white-space;
-  overflow-wrap: break-word;
-  -moz-user-modify: read-write;
-  -webkit-user-modify: read-write;
-  -webkit-user-select: auto;
-}
-
-/* apply back the draggable feature - exist only in Chromium and Safari */
-*:where([draggable="true"]) {
-  -webkit-user-drag: element;
-}
-
-*:where([type="button"]):not(:disabled),
-*:where([type="reset"]):not(:disabled),
-*:where([type="submit"]):not(:disabled),
-*:where(button):not(:disabled) {
-  cursor: pointer;
-}
-
-a,
-abbr,
-acronym,
-address,
-applet,
-article,
-aside,
-audio,
-b,
-big,
-blockquote,
-body,
-canvas,
-caption,
-center,
-cite,
-code,
-dd,
-del,
-details,
-dfn,
-div,
-dl,
-dt,
-em,
-embed,
-fieldset,
-figcaption,
-figure,
-footer,
-form,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-header,
-hgroup,
-html,
-i,
-iframe,
-img,
-ins,
-kbd,
-label,
-legend,
-li,
-mark,
-menu,
-nav,
-object,
-ol,
-output,
-p,
-pre,
-q,
-ruby,
-s,
-samp,
-section,
-small,
-span,
-strike,
-strong,
-sub,
-summary,
-sup,
-table,
-tbody,
-td,
-tfoot,
-th,
-thead,
-time,
-tr,
-tt,
-u,
-ul,
-var,
-video {
-  border: 0;
-  font: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-}
-
-a:not([class]) {
-  color: currentColor;
-  text-decoration-skip-ink: auto;
-}
-
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
-
-blockquote,
-q {
-  quotes: none;
-}
-
-blockquote,
-body,
-dd,
-dl,
-figure,
-h1,
-h2,
-h3,
-h4,
-p {
-  margin-block-end: 0;
-}
-
-blockquote:after,
-blockquote:before,
-q:after,
-q:before {
-  content: "";
-  content: none;
-}
-
-body {
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-}
-
-button,
-h1,
-h2,
-h3,
-h4,
-input,
-label {
-  line-height: 1.1;
-}
-
-button,
-input,
-select,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  font: inherit;
-}
-
-canvas,
-img,
-picture,
-svg,
-video {
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: block;
-  font-style: italic;
-  max-width: 100%;
-  vertical-align: middle;
-}
-
-caption,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-td,
-th {
-  font-weight: 400;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-wrap: balance;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  overflow-wrap: break-word;
-}
-
-html {
-  -moz-text-size-adjust: none;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-}
-
-html:focus-within {
-  scroll-behavior: smooth;
-}
-
-/* For images to not be able to exceed their container */
-img {
-  max-inline-size: 100%;
-  max-block-size: 100%;
-}
-
-/* Safari - solving issue when using user-select:none on the <body> text input doesn't working */
-input,
-textarea {
-  -webkit-user-select: auto;
-}
-
-/* minimum style to allow to style meter element */
-meter {
-  -webkit-appearance: revert;
-  appearance: revert;
-}
-
-ol,
-ol[role="list"],
-ul,
-ul[role="list"] {
-  list-style: none;
-}
-
-p {
-  text-wrap: pretty;
-}
-
-/* removes spacing between cells in tables */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-textarea:not([rows]) {
-  min-height: 10em;
-}
-
-td,
-th {
-  text-align: left;
-  vertical-align: top;
-}
-
-#__next,
-#root {
-  isolation: isolate;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::after,
-  *::before {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    scroll-behavior: auto;
-    transition-duration: 0.01ms;
-    transition: none;
+  html {
+    /* Enable native dark/light mode UI components. */
+    color-scheme: light dark;
+    /* Prevent layout shifts when scrollbars appear. */
+    scrollbar-gutter: stable;
+    /* Prevent adjustments of font size after orientation changes in iOS. */
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
-  html:focus-within {
-    scroll-behavior: auto;
+  body {
+    /* Improve text rendering. */
+    -webkit-font-smoothing: antialiased;
+    /* Remove the 8px body margin. */
+    margin: 0;
+    /* Body should take up the entire viewport. */
+    min-height: 100dvh;
+  }
+
+  :root {
+    /* Fix box-sizing to include borders and padding. */
+    box-sizing: border-box;
+    /* Set consistent line-height default. */
+    line-height: 1.5;
+  }
+
+  /* Remove default margin. */
+  *:where(:not(dialog, [popover])) { margin: 0; }
+
+  *,
+  ::before,
+  ::after {
+    /* Inherit box-sizing from root. */
+    box-sizing: inherit;
+    /* Backgrounds do not repeat by default. */
+    background-repeat: no-repeat;
+  }
+
+  ::before,
+  ::after {
+    /* Add text decoration inheritance in all browsers. */
+    text-decoration: inherit;
+    /* Add vertical alignment inheritance in all browsers. */
+    vertical-align: inherit;
+  }
+
+  /* Improve line wrapping. */
+  h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+
+  /* Avoid text overflows. */
+  h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; }
+
+  /* Set shorter line heights on headings and interactive elements. */
+  h1, h2, h3, h4, h5, h6, button, input, label {
+    line-height: 1.1;
+  }
+
+  /* Remove list styles on ul, ol elements with a list role. */
+  ul[role='list'], ol[role='list'] {
+    list-style: none;
+  }
+
+  /* Prevent `sub` and `sup` elements from affecting the line height. */
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub { bottom: -0.25em; }
+  sup { top: -0.5em; }
+
+  /* Ensure that embedded content doesn't overflow its container. */
+  audio, canvas, embed, iframe, img, object, picture, svg, video {
+    display: block;
+		max-block-size: 100%;
+		max-inline-size: 100%;
+	}
+
+  /* Force elements to inherit typography. */
+  button, input, select, textarea {
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+  }
+
+  /* Prevent fieldsets from expanding past their container. */
+  fieldset { min-inline-size: 0; }
+
+  /* Stop textarea from breaking grid. */
+  textarea { resize: vertical; }
+
+  /* Standardize file upload button typography. */
+  ::file-selector-button {
+    color: inherit;
+    font: inherit;
+  }
+
+  /* Anything that has been anchored to should have extra scroll margin. */
+  :target { scroll-margin-block: 5ex; }
+
+  /* Normalize search input styles on iOS and macOS. */
+	[type="search"] {
+    -webkit-appearance: textfield;
+    appearance: textfield;
+  }
+	@supports (-webkit-touch-callout: none) {
+		[type="search"] {
+			border: 1px solid -apple-system-secondary-label;
+			background-color: canvas;
+		}
+	}
+
+  /* Optimize mark element in Forced Colors Mode */
+	@media (forced-colors: active) {
+		mark {
+			color: HighlightText;
+			background-color: Highlight;
+		}
+	}
+
+  /* Enable keyword animations. */
+  @media (prefers-reduced-motion: no-preference) {
+    html { interpolate-size: allow-keywords; }
   }
 }

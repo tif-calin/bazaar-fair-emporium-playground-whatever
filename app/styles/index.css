@@ -6,7 +6,7 @@
   color: var(--clr-txt);
   color-scheme: light dark;
   font-family: var(--fnt-sans);
-  line-height: 1.45; /* https://practicaltypography.com/line-spacing.html */
+  line-height: 1.35; /* https://practicaltypography.com/line-spacing.html */
 }
 
 html,
@@ -17,15 +17,19 @@ body {
 
   & *:where(h1, h2, h3, h4, h5, h6) {
     line-height: 1;
-    text-align: center;
     width: 100%;
 
-    &:where(h1) { font-size: 2.5em; font-weight: 700; }
+    &:where(h1) { font-size: 2.5em; font-weight: 700; text-align: center; }
     &:where(h2) { font-size: 2em; font-weight: 650; }
     &:where(h3) { font-size: 1.75em; font-weight: 600; }
     &:where(h4) { font-size: 1.5em; font-weight: 550; }
     &:where(h5) { font-size: 1.25em; font-weight: 500; }
     &:where(h6) { font-size: 1em; font-weight: 450; }
+  }
+
+  & ul,
+  & ol {
+    padding-left: 1rem;
   }
 
   & a {
